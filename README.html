@@ -35,9 +35,28 @@ NetGrowler.</p>
     and adding it to your account's "Startup Items" tab.</li>
 </ol>
 
+<h2>Known Problems</h2>
+
+<ol>
+<li>It's overly noisy when waking from sleep. It tells you that your wireless
+    connection went away and came back, that the Ethernet connection was
+    disconnected, and that an IP was released and reacquired. I should monitor
+    for system wake notifications and set a timer to calm this down.</li>
+<li>The interface names are hardcoded &mdash; this could cause problems with
+    machines that don't have a single Ethernet port as <tt>en0</tt> and a
+    single AirPort as <tt>en1</tt>.</li>
+<li>It doesn't track your primary IP very well yet.</li>
+</ol>
+
+<p>All of these are solvable with just a little effort. Feel free to do so
+yourself and <a href="mailto:slamb@slamb.org">send patches</a>.</p>
+
+<p>If you find any other problems, please <a href="mailto:slamb@slamb.org">let
+me know</a>.</p>
+
 <h2><a name="license">License</a></h2>
 
-<p>Copyright &copy; 2004 Scott Lamb.</p>
+<p>Copyright &copy; 2004 Scott Lamb &lt;<a href="mailto:slamb@slamb.org">slamb@slamb.org</a>&gt;.</p>
 
 <p>Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
