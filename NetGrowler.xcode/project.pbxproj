@@ -288,7 +288,7 @@
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = GrowlAppBridge.framework;
-			path = /Users/slamb/Library/Frameworks/GrowlAppBridge.framework;
+			path = /Library/Frameworks/GrowlAppBridge.framework;
 			refType = 0;
 			sourceTree = "<absolute>";
 		};
