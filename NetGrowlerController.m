@@ -42,7 +42,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 - (void)linkStatusChange:(NSDictionary*)newValue;
 - (void)ipAddressChange:(NSDictionary*)newValue;
 - (void)airportStatusChange:(NSDictionary*)newValue;
-- (NSString*)getMediaForInterface:(NSString*)anInterface;
++ (NSString*)getMediaForInterface:(NSString*)anInterface;
 @end
 
 @implementation NetGrowlerController
@@ -234,7 +234,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	airportStatus = [newValue retain];
 }
 
-- (NSString*) getMediaForInterface:(NSString*)anInterface {
++ (NSString*) getMediaForInterface:(NSString*)anInterface {
 	// This is all made by looking through Darwin's src/network_cmds/ifconfig.tproj.
 	// There's no pretty way to get media stuff; I've stripped it down to the essentials
 	// for what I'm doing.
@@ -247,29 +247,12 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	memset(&ifmr, 0, sizeof(ifmr));
 	strncpy(ifmr.ifm_name, [anInterface cString], [anInterface cStringLength]);
 
-	/*
-	 * First round.
-	 * Make the request, see if it passes. (Some interfaces have no media information.)
-	 * Find out how much storage space we need.
-	 */
 	if (ioctl(s, SIOCGIFMEDIA, (caddr_t)&ifmr) < 0) {
 		// Media not supported.
 		close(s);
 		return nil;
 	}
 	
-#if 0
-	int *media_list = (int*) malloc(ifmr.ifm_count * sizeof(int));
-	NSAssert(@"Memory allocation failure", media_list != NULL);
-	ifmr.ifm_ulist = media_list;
-			
-	/*
-	 * Second round.
-	 * Now it should actually fill in the information.
-	 */
-	int retval = ioctl(s, SIOCGIFMEDIA, (caddr_t)&ifmr);
-	NSAssert(@"Unexpected SIOCGIFMEDIA failure", retval >= 0);
-#endif
 	close(s);
 
 	// Now ifmr.ifm_current holds the selected type (probably auto-select)
