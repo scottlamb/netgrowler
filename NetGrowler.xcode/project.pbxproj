@@ -47,6 +47,7 @@
 //104
 		1058C7A0FEA54F0111CA2CBB = {
 			children = (
+				65D17AD407737296002A10A1,
 				654DA6C806DF02970052FACD,
 				1058C7A1FEA54F0111CA2CBB,
 			);
@@ -326,6 +327,20 @@
 			settings = {
 			};
 		};
+		65D17AD407737296002A10A1 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = SystemConfiguration.framework;
+			path = /System/Library/Frameworks/SystemConfiguration.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		65D17AD507737296002A10A1 = {
+			fileRef = 65D17AD407737296002A10A1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //650
 //651
 //652
@@ -427,6 +442,7 @@
 			files = (
 				8D11072F0486CEB800E47090,
 				654DA6C906DF02970052FACD,
+				65D17AD507737296002A10A1,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
