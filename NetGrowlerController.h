@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SCDynamicStore.h"
+#import <Growl/GrowlApplicationBridge.h>
 
 typedef enum {
 	S_GROWL_NO_LAUNCH,
@@ -14,12 +15,15 @@ typedef enum {
 	S_GROWL_LAUNCHED
 } State;
 
-@interface NetGrowlerController : NSObject {
+@interface NetGrowlerController : NSObject <GrowlApplicationBridgeDelegate> {
 	State state;
 	SCDynamicStore *scNotificationManager;
 	NSMutableDictionary *airportStatus;
 	NSImage *airportIcon;
 	NSImage *ipIcon;
 }
+
+- (NSDictionary*) registrationDictionaryForGrowl;
+- (NSString*) applicationNameForGrowl;
 
 @end

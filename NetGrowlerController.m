@@ -15,8 +15,7 @@
 
 // Rest of the includes
 #import "NetGrowlerController.h"
-#import <GrowlAppBridge/GrowlApplicationBridge.h>
-#import <GrowlAppBridge/GrowlDefines.h>
+#import <Growl/GrowlApplicationBridge.h>
 
 #define AIRPORT_DISCONNECTED 1 /* @"Link Status" == 1 seems to mean disconnected */
 
@@ -36,8 +35,6 @@ static struct ifmedia_description ifm_subtype_ethernet_descriptions[] = IFM_SUBT
 static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_OPTION_DESCRIPTIONS;
 
 @interface NetGrowlerController (PRIVATE)
-- (void)registerGrowl:(void*)context;
-- (void)applicationDidFinishLaunching:(NSNotification*)notification;
 - (void)linkStatusChange:(NSDictionary*)newValue;
 - (void)ipAddressChange:(NSDictionary*)newValue;
 - (void)airportStatusChange:(NSDictionary*)newValue;
@@ -71,17 +68,8 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 							  selector:@selector(airportStatusChange:)
 								forKey:@"State:/Network/Interface/en1/AirPort"];
 	airportStatus = [[scNotificationManager valueForKey:@"State:/Network/Interface/en1/AirPort"] retain];
-	
-	// Start growl
-	if (self) {
-		if ([GrowlAppBridge launchGrowlIfInstalledNotifyingTarget:self
-														 selector:@selector(registerGrowl:)
-														  context:NULL] == NO) {
-			self->state = S_GROWL_NO_LAUNCH;
-			NSLog(@"Growl failed to launch");
-		}
-	}
-
+		
+	[GrowlApplicationBridge setGrowlDelegate:self];
 	return self;
 }
 
@@ -97,11 +85,26 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	[super dealloc];
 }
 
-- (void)registerGrowl:(void*)context
+- (void)applicationDidFinishLaunching:(NSNotification*)notification
 {
-	NSAssert(self->state == S_GROWL_LAUNCHING, @"Growl must be launching to register");
-	self->state = S_GROWL_LAUNCHED;
-	NSLog(@"Registering Growl");
+	if ([GrowlApplicationBridge isGrowlInstalled] == NO) {
+		NSRunAlertPanel(@"NetGrowler error",
+						@"Growl is not installed",
+						@"Exit",
+						NULL,
+						NULL);
+		[NSApp terminate];
+	/*} else if ([GrowlApplicationBridge isGrowlRunning] == NO) {
+		NSRunAlertPanel(@"NetGrowler error",
+						@"Growl failed to start",
+						@"Exit",
+						NULL,
+						NULL);*/
+	}
+}
+
+- (NSDictionary*)registrationDictionaryForGrowl
+{
 	NSArray *allNotes = [NSArray arrayWithObjects:
 		NOTE_LINK_UP,
 		NOTE_LINK_DOWN,
@@ -110,72 +113,54 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 		NOTE_AIRPORT_CONNECT,
 		NOTE_AIRPORT_DISCONNECT,
 		nil];
-	NSDictionary *regDict = [NSDictionary dictionaryWithObjectsAndKeys:
-		APP_NAME, GROWL_APP_NAME,
+	return [NSDictionary dictionaryWithObjectsAndKeys:
 		allNotes, GROWL_NOTIFICATIONS_ALL,
 		allNotes, GROWL_NOTIFICATIONS_DEFAULT,
 		nil];
-	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:GROWL_APP_REGISTRATION
-						  object:nil
-						userInfo:regDict];
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification*)notification
+- (NSString*)applicationNameForGrowl
 {
-	NSLog(@"Application finished launching");
-	if (self->state == S_GROWL_NO_LAUNCH) {
-		NSRunAlertPanel(@"Growl launch error",
-						@"Unable to launch growl; not properly installed.",
-						@"Exit",
-						NULL,
-						NULL);
-		[NSApp terminate];
-	}
+	return @"NetGrowler";
 }
 
 - (void)linkStatusChange:(NSDictionary*)newValue
 {
 	Boolean active = CFBooleanGetValue((CFBooleanRef) [newValue objectForKey:@"Active"]);
-	NSDictionary *noteDict = nil;
 
 	if (active) {
+		NSLog(@"Ethernet activated");
 		NSString *media = [self getMediaForInterface:@"en0"];
-		NSString *desc = [NSString stringWithFormat:@"Interface:\ten0\nMedia:\t%@", media];
-		NSLog(@"Ethernet cable plugged");
-		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
-			NOTE_LINK_UP, GROWL_NOTIFICATION_NAME,
-			APP_NAME, GROWL_APP_NAME,
-			@"Ethernet activated", GROWL_NOTIFICATION_TITLE,
-			desc, GROWL_NOTIFICATION_DESCRIPTION,
-			[ipIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
-			nil];
+		[GrowlApplicationBridge notifyWithTitle:@"Ethernet activated"
+									description:[NSString stringWithFormat:@"Interface:\ten0\nMedia:\t%@", media]
+							   notificationName:NOTE_LINK_UP
+									   iconData:[ipIcon TIFFRepresentation]
+									   priority:0
+									   isSticky:NO
+								   clickContext:nil];
 	} else {
-		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
-			NOTE_LINK_DOWN, GROWL_NOTIFICATION_NAME,
-			APP_NAME, GROWL_APP_NAME,
-			@"Ethernet deactivated", GROWL_NOTIFICATION_TITLE,
-			[NSString stringWithFormat:@"Interface:\ten0"], GROWL_NOTIFICATION_DESCRIPTION,
-			[ipIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
-			nil];
+		NSLog(@"Ethernet deactivated");
+		[GrowlApplicationBridge notifyWithTitle:@"Ethernet deactivated"
+									description:[NSString stringWithFormat:@"Interface:\ten0"]
+							   notificationName:NOTE_LINK_DOWN
+									   iconData:[ipIcon TIFFRepresentation]
+									   priority:0
+									   isSticky:NO
+								   clickContext:nil];
 	}		
-	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:GROWL_NOTIFICATION
-																   object:nil
-																 userInfo:noteDict];	
 }
 
 - (void)ipAddressChange:(NSDictionary*)newValue
 {
-	NSDictionary *noteDict = nil;
-
 	if (newValue == nil) {
-		NSLog(@"No primary interface");
-		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
-			NOTE_IP_RELEASED, GROWL_NOTIFICATION_NAME,
-			APP_NAME, GROWL_APP_NAME,
-			@"IP address released", GROWL_NOTIFICATION_TITLE,
-			[NSString stringWithFormat:@"No IP address now"], GROWL_NOTIFICATION_DESCRIPTION,
-			[ipIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
-			nil];
+		NSLog(@"IP address released");
+		[GrowlApplicationBridge notifyWithTitle:@"IP address released"
+									description:[NSString stringWithFormat:@"No IP address now"]
+							   notificationName:NOTE_IP_RELEASED
+									   iconData:[ipIcon TIFFRepresentation]
+									   priority:0
+									   isSticky:NO
+								   clickContext:nil];
 	} else {
 		NSLog(@"IP address acquired");
 		NSString *ipv4Key = [NSString stringWithFormat:@"State:/Network/Interface/%@/IPv4",
@@ -183,36 +168,33 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 		NSDictionary *ipv4Info = [scNotificationManager valueForKey:ipv4Key];
 		NSArray *addrs = [ipv4Info valueForKey:@"Addresses"];
 		NSAssert([addrs count] > 0, @"Empty address array");
-		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
-			NOTE_IP_ACQUIRED, GROWL_NOTIFICATION_NAME,
-			APP_NAME, GROWL_APP_NAME,
-			@"IP address acquired", GROWL_NOTIFICATION_TITLE,
-			[NSString stringWithFormat:@"New primary IP: %@", [addrs objectAtIndex:0]], GROWL_NOTIFICATION_DESCRIPTION,
-			[ipIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
-			nil];
+		[GrowlApplicationBridge notifyWithTitle:@"IP address acquired"
+									description:[NSString stringWithFormat:@"New primary IP: %@", [addrs objectAtIndex:0]]
+							   notificationName:NOTE_IP_ACQUIRED
+									   iconData:[ipIcon TIFFRepresentation]
+									   priority:0
+									   isSticky:NO
+								   clickContext:nil];
 	}
-	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:GROWL_NOTIFICATION
-																   object:nil
-																 userInfo:noteDict];
 }
 
 - (void)airportStatusChange:(NSDictionary*)newValue
 {
-	NSLog(@"AirPort event");
-	NSMutableDictionary *noteDict = nil;
 	if ([[airportStatus objectForKey:@"BSSID"] isEqualToData:[newValue objectForKey:@"BSSID"]]) {
 		// No change. Ignore.
 	} else if ([[newValue objectForKey:@"Link Status"] intValue] == AIRPORT_DISCONNECTED) {
+		NSLog(@"AirPort disconnect");
 		NSString *desc = [NSString stringWithFormat:@"Left network %@.",
 			[airportStatus objectForKey:@"SSID"]];
-		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
-			NOTE_AIRPORT_DISCONNECT, GROWL_NOTIFICATION_NAME,
-			APP_NAME, GROWL_APP_NAME,
-			@"AirPort disconnected", GROWL_NOTIFICATION_TITLE,
-			desc, GROWL_NOTIFICATION_DESCRIPTION,
-			[airportIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
-			nil];
+		[GrowlApplicationBridge notifyWithTitle:@"AirPort disconnected"
+									description:desc
+							   notificationName:NOTE_AIRPORT_DISCONNECT
+									   iconData:[airportIcon TIFFRepresentation]
+									   priority:0
+									   isSticky:NO
+								   clickContext:nil];
 	} else {
+		NSLog(@"AirPort connect");
 		const unsigned char *bssidBytes = [[newValue objectForKey:@"BSSID"] bytes];
 		NSString *bssid = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
 			bssidBytes[0],
@@ -224,17 +206,14 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 		NSString *desc = [NSString stringWithFormat:@"Joined network.\nSSID:\t\t%@\nBSSID:\t%@",
 													[newValue objectForKey:@"SSID"],
 													bssid];
-		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
-			NOTE_AIRPORT_CONNECT, GROWL_NOTIFICATION_NAME,
-			APP_NAME, GROWL_APP_NAME,
-			@"AirPort connected", GROWL_NOTIFICATION_TITLE,
-			desc, GROWL_NOTIFICATION_DESCRIPTION,
-			[airportIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
-			nil];
+		[GrowlApplicationBridge notifyWithTitle:@"AirPort connected"
+									description:desc
+							   notificationName:NOTE_AIRPORT_DISCONNECT
+									   iconData:[airportIcon TIFFRepresentation]
+									   priority:0
+									   isSticky:NO
+								   clickContext:nil];
 	}
-	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:GROWL_NOTIFICATION
-																   object:nil
-																 userInfo:noteDict];
 	airportStatus = [newValue retain];
 }
 
