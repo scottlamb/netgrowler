@@ -42,7 +42,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 - (void)linkStatusChange:(NSDictionary*)newValue;
 - (void)ipAddressChange:(NSDictionary*)newValue;
 - (void)airportStatusChange:(NSDictionary*)newValue;
-+ (NSString*)getMediaForInterface:(NSString*)anInterface;
+- (NSString*)getMediaForInterface:(NSString*)anInterface;
 @end
 
 @implementation NetGrowlerController
@@ -169,7 +169,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	NSDictionary *noteDict = nil;
 
 	if (newValue == nil) {
-		NSLog(@"IP address released");
+		NSLog(@"No primary interface");
 		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
 			NOTE_IP_RELEASED, GROWL_NOTIFICATION_NAME,
 			APP_NAME, GROWL_APP_NAME,
@@ -179,11 +179,16 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 			nil];
 	} else {
 		NSLog(@"IP address acquired");
+		NSString *ipv4Key = [NSString stringWithFormat:@"State:/Network/Interface/%@/IPv4",
+													   [newValue valueForKey:@"PrimaryInterface"]];
+		NSDictionary *ipv4Info = [scNotificationManager getValueForKey:ipv4Key];
+		NSArray *addrs = [ipv4Info valueForKey:@"Addresses"];
+		NSAssert([addrs count] > 0, @"Empty address array");
 		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
 			NOTE_IP_ACQUIRED, GROWL_NOTIFICATION_NAME,
 			APP_NAME, GROWL_APP_NAME,
 			@"IP address acquired", GROWL_NOTIFICATION_TITLE,
-			[NSString stringWithFormat:@"Have IP address now"], GROWL_NOTIFICATION_DESCRIPTION,
+			[NSString stringWithFormat:@"New primary IP: %@", [addrs objectAtIndex:0]], GROWL_NOTIFICATION_DESCRIPTION,
 			[ipIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
 			nil];
 	}
@@ -217,7 +222,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 			bssidBytes[3],
 			bssidBytes[4],
 			bssidBytes[5]];
-		NSString *desc = [NSString stringWithFormat:@"Joined network.\nSSID:\t%@\nBSSID:\t%@",
+		NSString *desc = [NSString stringWithFormat:@"Joined network.\nSSID:\t\t%@\nBSSID:\t%@",
 													[newValue objectForKey:@"SSID"],
 													bssid];
 		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -234,7 +239,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	airportStatus = [newValue retain];
 }
 
-+ (NSString*) getMediaForInterface:(NSString*)anInterface {
+- (NSString*)getMediaForInterface:(NSString*)anInterface {
 	// This is all made by looking through Darwin's src/network_cmds/ifconfig.tproj.
 	// There's no pretty way to get media stuff; I've stripped it down to the essentials
 	// for what I'm doing.
