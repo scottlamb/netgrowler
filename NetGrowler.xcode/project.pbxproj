@@ -7,8 +7,8 @@
 	objects = {
 		080E96DDFE201D6D7F000001 = {
 			children = (
-				654DA72406DF0BF00052FACD,
-				654DA72506DF0BF00052FACD,
+				659C0B890774BEF3004F30A4,
+				659C0B8A0774BEF3004F30A4,
 				654DA6C006DF00BA0052FACD,
 				654DA6C106DF00BA0052FACD,
 			);
@@ -299,30 +299,30 @@
 			settings = {
 			};
 		};
-		654DA72406DF0BF00052FACD = {
+		659C0B890774BEF3004F30A4 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = IXSCNotificationManager.h;
+			path = SCDynamicStore.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		654DA72506DF0BF00052FACD = {
+		659C0B8A0774BEF3004F30A4 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.objc;
-			path = IXSCNotificationManager.m;
+			path = SCDynamicStore.m;
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		654DA72606DF0BF00052FACD = {
-			fileRef = 654DA72406DF0BF00052FACD;
+		659C0B8B0774BEF3004F30A4 = {
+			fileRef = 659C0B890774BEF3004F30A4;
 			isa = PBXBuildFile;
 			settings = {
 			};
 		};
-		654DA72706DF0BF00052FACD = {
-			fileRef = 654DA72506DF0BF00052FACD;
+		659C0B8C0774BEF3004F30A4 = {
+			fileRef = 659C0B8A0774BEF3004F30A4;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -394,7 +394,7 @@
 			files = (
 				8D1107280486CEB800E47090,
 				654DA6C206DF00BA0052FACD,
-				654DA72606DF0BF00052FACD,
+				659C0B8B0774BEF3004F30A4,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,7 +424,7 @@
 			files = (
 				8D11072D0486CEB800E47090,
 				654DA6C306DF00BA0052FACD,
-				654DA72706DF0BF00052FACD,
+				659C0B8C0774BEF3004F30A4,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,9 +7,9 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 #import <CoreFoundation/CFArray.h>
-#import "IXSCNotificationManager.h"
+#import "SCDynamicStore.h"
 
-@interface IXSCNotificationManager (PRIVATE)
+@interface SCDynamicStore (PRIVATE)
 - (void)notificationOfChangedKeys:(NSArray*)changedKeys;
 @end
 
@@ -47,11 +47,11 @@
 
 @end
 
-static void _IXSCNotificationCallback(SCDynamicStoreRef dynStore, CFArrayRef changedKeys, void *info) {
-	[(IXSCNotificationManager*) info notificationOfChangedKeys:(NSArray*) changedKeys];
+static void scCallback(SCDynamicStoreRef dynStore, CFArrayRef changedKeys, void *info) {
+	[(SCDynamicStore*) info notificationOfChangedKeys:(NSArray*) changedKeys];
 }
 
-@implementation IXSCNotificationManager
+@implementation SCDynamicStore
 
 - (void)notificationOfChangedKeys:(NSArray*)changedKeys
 {
@@ -86,7 +86,7 @@ static void _IXSCNotificationCallback(SCDynamicStoreRef dynStore, CFArrayRef cha
 	dynStore = SCDynamicStoreCreate(
 		NULL, 
 		(CFStringRef) [[NSBundle mainBundle] bundleIdentifier],
-		_IXSCNotificationCallback,
+		scCallback,
 		&context
 	);
 	

@@ -6,7 +6,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "IXSCNotificationManager.h"
+#import "SCDynamicStore.h"
 
 typedef enum {
 	S_GROWL_NO_LAUNCH,
@@ -16,7 +16,7 @@ typedef enum {
 
 @interface NetGrowlerController : NSObject {
 	State state;
-	IXSCNotificationManager *scNotificationManager;
+	SCDynamicStore *scNotificationManager;
 	NSMutableDictionary *airportStatus;
 	NSImage *airportIcon;
 	NSImage *ipIcon;

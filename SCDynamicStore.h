@@ -9,10 +9,11 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 
 /**
- * Provides AppKit-style access to the SystemConfiguration keys.
+ * An AppKit-style wrapper around the Foundation-style SystemConfiguration framework's dynamic stores.
+ * Provides access to the SystemConfiguration keys.
  * Both simple queries and change notifications are supported.
  */
-@interface IXSCNotificationManager : NSObject {
+@interface SCDynamicStore : NSObject {
 	/** A reference to the SystemConfiguration dynamic store. */
 	SCDynamicStoreRef dynStore;
 	

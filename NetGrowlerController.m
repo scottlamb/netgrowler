@@ -60,7 +60,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	path = [[NSWorkspace sharedWorkspace] fullPathForApplication:IP_APP_NAME];
 	ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
 	
-	scNotificationManager = [[IXSCNotificationManager alloc] init];
+	scNotificationManager = [[SCDynamicStore alloc] init];
 	[scNotificationManager addObserver:self
 							  selector:@selector(linkStatusChange:)
 								forKey:@"State:/Network/Interface/en0/Link"];
