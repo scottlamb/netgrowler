@@ -1,10 +1,9 @@
-//
-//  main.m
-//  NetGrowler
-//
-//  Created by Scott Lamb on Fri Aug 27 2004.
-//  Copyright (c) 2004 __MyCompanyName__. All rights reserved.
-//
+/*
+ * $Id$
+ *
+ * Copyright (C) 2004 Scott Lamb <slamb@slamb.org>
+ * This file is part of NetGrowler, which is released under the MIT license.
+ */
 
 #import "NetGrowlerController.h"
 

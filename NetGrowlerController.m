@@ -1,10 +1,9 @@
-//
-//  NetGrowlerController.m
-//  NetGrowler
-//
-//  Created by Scott Lamb on Fri Aug 27 2004.
-//  Copyright (c) 2004 __MyCompanyName__. All rights reserved.
-//
+/*
+ * $Id$
+ *
+ * Copyright (C) 2004 Scott Lamb <slamb@slamb.org>
+ * This file is part of NetGrowler, which is released under the MIT license.
+ */
 
 // Media stuff
 #import <sys/socket.h>
@@ -26,7 +25,7 @@ static NSString *NOTE_LINK_DOWN				= @"NetGrowler-Link-Down";
 static NSString *NOTE_IP_ACQUIRED			= @"NetGrowler-IP-Acquired";
 static NSString *NOTE_IP_RELEASED			= @"NetGrowler-IP-Released";
 static NSString *NOTE_AIRPORT_CONNECT		= @"NetGrowler-AirPort-Connect";
-static NSString *NOTE_AIRPORT_DISCONNECT  = @"NetGrowler-AirPort-Disconnect";
+static NSString *NOTE_AIRPORT_DISCONNECT	= @"NetGrowler-AirPort-Disconnect";
 
 static NSString *AIRPORT_APP_NAME			= @"Airport Admin Utility.app";
 static NSString *IP_APP_NAME				= @"Internet Connect.app";
@@ -71,7 +70,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	[scNotificationManager addObserver:self
 							  selector:@selector(airportStatusChange:)
 								forKey:@"State:/Network/Interface/en1/AirPort"];
-	airportStatus = [[scNotificationManager getValueForKey:@"State:/Network/Interface/en1/AirPort"] retain];
+	airportStatus = [[scNotificationManager valueForKey:@"State:/Network/Interface/en1/AirPort"] retain];
 	
 	// Start growl
 	if (self) {
@@ -181,7 +180,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 		NSLog(@"IP address acquired");
 		NSString *ipv4Key = [NSString stringWithFormat:@"State:/Network/Interface/%@/IPv4",
 													   [newValue valueForKey:@"PrimaryInterface"]];
-		NSDictionary *ipv4Info = [scNotificationManager getValueForKey:ipv4Key];
+		NSDictionary *ipv4Info = [scNotificationManager valueForKey:ipv4Key];
 		NSArray *addrs = [ipv4Info valueForKey:@"Addresses"];
 		NSAssert([addrs count] > 0, @"Empty address array");
 		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
