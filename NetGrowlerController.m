@@ -20,17 +20,17 @@
 
 #define AIRPORT_DISCONNECTED 1 /* @"Link Status" == 1 seems to mean disconnected */
 
-static NSString *NOTE_LINK_UP				= @"NetGrowler-Link-Up";
-static NSString *NOTE_LINK_DOWN				= @"NetGrowler-Link-Down";
-static NSString *NOTE_IP_ACQUIRED			= @"NetGrowler-IP-Acquired";
-static NSString *NOTE_IP_RELEASED			= @"NetGrowler-IP-Released";
-static NSString *NOTE_AIRPORT_CONNECT		= @"NetGrowler-AirPort-Connect";
-static NSString *NOTE_AIRPORT_DISCONNECT	= @"NetGrowler-AirPort-Disconnect";
+static NSString *NOTE_LINK_UP                   = @"Link-Up";
+static NSString *NOTE_LINK_DOWN                 = @"Link-Down";
+static NSString *NOTE_IP_ACQUIRED               = @"IP-Acquired";
+static NSString *NOTE_IP_RELEASED               = @"IP-Released";
+static NSString *NOTE_AIRPORT_CONNECT           = @"AirPort-Connect";
+static NSString *NOTE_AIRPORT_DISCONNECT        = @"AirPort-Disconnect";
 
-static NSString *AIRPORT_APP_NAME			= @"Airport Admin Utility.app";
-static NSString *IP_APP_NAME				= @"Internet Connect.app";
+static NSString *AIRPORT_APP_NAME               = @"Airport Admin Utility.app";
+static NSString *IP_APP_NAME                    = @"Internet Connect.app";
 
-static NSString *APP_NAME					= @"NetGrowler.app";
+static NSString *APP_NAME                       = @"NetGrowler.app";
 
 static struct ifmedia_description ifm_subtype_ethernet_descriptions[] = IFM_SUBTYPE_ETHERNET_DESCRIPTIONS;
 static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_OPTION_DESCRIPTIONS;
