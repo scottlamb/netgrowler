@@ -18,5 +18,7 @@ EOF
 growlnotify \
     --appIcon 'Internet Connect' \
     'IP address acquired' <<EOF
-New primary IP:	172.16.1.2
+New primary IP.
+Type:	Private
+Address:	172.16.1.2
 EOF
