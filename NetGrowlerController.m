@@ -12,6 +12,8 @@
 
 #define AIRPORT_DISCONNECTED 1 /* @"Link Status" == 1 seems to mean disconnected */
 
+static NSString *NOTE_LINK_UP				= @"NetGrowler-Link-Up";
+static NSString *NOTE_LINK_DOWN				= @"NetGrowler-Link-Down";
 static NSString *NOTE_IP_ACQUIRED			= @"NetGrowler-IP-Acquired";
 static NSString *NOTE_IP_RELEASED			= @"NetGrowler-IP-Released";
 static NSString *NOTE_AIRPORT_CONNECT		= @"NetGrowler-AirPort-Connect";
@@ -25,6 +27,7 @@ static NSString *APP_NAME					= @"NetGrowler.app";
 @interface NetGrowlerController (PRIVATE)
 - (void)registerGrowl:(void*)context;
 - (void)applicationDidFinishLaunching:(NSNotification*)notification;
+- (void)linkStatusChange:(NSDictionary*)newValue;
 - (void)ipAddressChange:(NSDictionary*)newValue;
 - (void)airportStatusChange:(NSDictionary*)newValue;
 @end
@@ -46,6 +49,9 @@ static NSString *APP_NAME					= @"NetGrowler.app";
 	ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
 	
 	scNotificationManager = [[IXSCNotificationManager alloc] init];
+	[scNotificationManager addObserver:self
+							  selector:@selector(linkStatusChange:)
+								forKey:@"State:/Network/Interface/en0/Link"];
 	[scNotificationManager addObserver:self
 							  selector:@selector(ipAddressChange:)
 								forKey:@"State:/Network/Global/IPv4"];
@@ -85,6 +91,8 @@ static NSString *APP_NAME					= @"NetGrowler.app";
 	self->state = S_GROWL_LAUNCHED;
 	NSLog(@"Registering Growl");
 	NSArray *allNotes = [NSArray arrayWithObjects:
+		NOTE_LINK_UP,
+		NOTE_LINK_DOWN,
 		NOTE_IP_ACQUIRED,
 		NOTE_IP_RELEASED,
 		NOTE_AIRPORT_CONNECT,
@@ -111,6 +119,34 @@ static NSString *APP_NAME					= @"NetGrowler.app";
 						NULL);
 		[NSApp terminate];
 	}
+}
+
+- (void)linkStatusChange:(NSDictionary*)newValue
+{
+	Boolean active = CFBooleanGetValue((CFBooleanRef) [newValue objectForKey:@"Active"]);
+	NSDictionary *noteDict = nil;
+
+	if (active) {
+		NSLog(@"Ethernet cable plugged");
+		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
+			NOTE_LINK_UP, GROWL_NOTIFICATION_NAME,
+			APP_NAME, GROWL_APP_NAME,
+			@"Ethernet active", GROWL_NOTIFICATION_TITLE,
+			[NSString stringWithFormat:@"Gained wired connection."], GROWL_NOTIFICATION_DESCRIPTION,
+			[ipIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
+			nil];
+	} else {
+		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
+			NOTE_LINK_DOWN, GROWL_NOTIFICATION_NAME,
+			APP_NAME, GROWL_APP_NAME,
+			@"Ethernet inactive", GROWL_NOTIFICATION_TITLE,
+			[NSString stringWithFormat:@"Lost wired connection."], GROWL_NOTIFICATION_DESCRIPTION,
+			[ipIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
+			nil];
+	}		
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:GROWL_NOTIFICATION
+																   object:nil
+																 userInfo:noteDict];	
 }
 
 - (void)ipAddressChange:(NSDictionary*)newValue
@@ -166,7 +202,7 @@ static NSString *APP_NAME					= @"NetGrowler.app";
 			bssidBytes[3],
 			bssidBytes[4],
 			bssidBytes[5]];
-		NSString *desc = [NSString stringWithFormat:@"Joined network.\nSSID: %@\nBSSID: %@",
+		NSString *desc = [NSString stringWithFormat:@"Joined network.\nSSID:\t%@\nBSSID:\t%@",
 													[newValue objectForKey:@"SSID"],
 													bssid];
 		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
