@@ -13,6 +13,12 @@
 #import <net/if_media.h>
 #import <unistd.h>
 
+// Type of address stuff
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+
 // Rest of the includes
 #import "NetGrowlerController.h"
 #import <Growl/GrowlApplicationBridge.h>
@@ -38,6 +44,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 - (void)linkStatusChange:(NSDictionary*)newValue;
 - (void)ipAddressChange:(NSDictionary*)newValue;
 - (void)airportStatusChange:(NSDictionary*)newValue;
+- (NSString*)typeOfIP:(NSString*)ip;
 - (NSString*)getMediaForInterface:(NSString*)anInterface;
 @end
 
@@ -121,7 +128,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 
 - (NSString*)applicationNameForGrowl
 {
-	return @"NetGrowler";
+	return APP_NAME;
 }
 
 - (void)linkStatusChange:(NSDictionary*)newValue
@@ -168,8 +175,9 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 		NSDictionary *ipv4Info = [scNotificationManager valueForKey:ipv4Key];
 		NSArray *addrs = [ipv4Info valueForKey:@"Addresses"];
 		NSAssert([addrs count] > 0, @"Empty address array");
+		NSString *primaryIP = [addrs objectAtIndex:0];
 		[GrowlApplicationBridge notifyWithTitle:@"IP address acquired"
-									description:[NSString stringWithFormat:@"New primary IP: %@", [addrs objectAtIndex:0]]
+									description:[NSString stringWithFormat:@"New primary IP.\nType:\t%@\nAddress:\t%@", [self typeOfIP:primaryIP], primaryIP]
 							   notificationName:NOTE_IP_ACQUIRED
 									   iconData:[ipIcon TIFFRepresentation]
 									   priority:0
@@ -215,6 +223,43 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 								   clickContext:nil];
 	}
 	airportStatus = [newValue retain];
+}
+
+- (NSString*) typeOfIP:(NSString*)ipString {
+	static struct {
+		const char *network;
+		char bits;
+		NSString *type;
+	} types[] = {
+		// RFC 1918 addresses
+		{ "10.0.0.0", 8,		@"Private" },
+		{ "172.16.0.0", 12,		@"Private" },
+		{ "192.168.0.0", 16,	@"Private" },
+		// Other RFC 3330 addresses
+		{ "127.0.0.0", 8,		@"Loopback" },
+		{ "169.254.0.0", 16,	@"Link-local" },
+		{ "192.0.2.0", 24,		@"Test" },
+		{ "192.88.99.0", 24,	@"6to4 relay" },
+		{ "198.18.0.0", 15,		@"Benchmark" },
+		{ "240.0.0.0", 4,		@"Reserved" },
+		{ NULL, 0,				nil }
+	};
+	struct in_addr addr;
+	if (inet_pton(AF_INET, [ipString cString], &addr) <= 0) {
+		NSAssert(NO, @"Unable to parse given IP address.");
+	}
+	unsigned int i;
+	for (i = 0; types[i].network != NULL; i++) {
+		struct in_addr network_addr;
+		if (inet_pton(AF_INET, types[i].network, &network_addr) <= 0) {
+			NSAssert(NO, @"Unable to parse network IP address.");
+		}
+		int mask = 1<<types[i].bits - 1;
+		if ((network_addr.s_addr & mask) == (addr.s_addr & mask)) {
+			return types[i].type;
+		}
+	}
+	return @"Public";
 }
 
 - (NSString*)getMediaForInterface:(NSString*)anInterface {
