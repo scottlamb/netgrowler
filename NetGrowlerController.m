@@ -10,15 +10,23 @@
 #import <GrowlAppBridge/GrowlApplicationBridge.h>
 #import <GrowlAppBridge/GrowlDefines.h>
 
-static NSString *NOTE_IP_ACQUIRED		= @"NetGrowler-IP-Acquired";
-static NSString *NOTE_IP_RELEASED		= @"NetGrowler-IP-Released";
+#define AIRPORT_DISCONNECTED 1 /* @"Link Status" == 1 seems to mean disconnected */
 
-static NSString *APP_NAME				= @"NetGrowler";
+static NSString *NOTE_IP_ACQUIRED			= @"NetGrowler-IP-Acquired";
+static NSString *NOTE_IP_RELEASED			= @"NetGrowler-IP-Released";
+static NSString *NOTE_AIRPORT_CONNECT		= @"NetGrowler-AirPort-Connect";
+static NSString *NOTE_AIRPORT_DISCONNECT  = @"NetGrowler-AirPort-Disconnect";
+
+static NSString *AIRPORT_APP_NAME			= @"Airport Admin Utility.app";
+static NSString *IP_APP_NAME				= @"Internet Connect.app";
+
+static NSString *APP_NAME					= @"NetGrowler.app";
 
 @interface NetGrowlerController (PRIVATE)
 - (void)registerGrowl:(void*)context;
 - (void)applicationDidFinishLaunching:(NSNotification*)notification;
-- (void)addressChange:(NSNotification*)notification;
+- (void)ipAddressChange:(NSDictionary*)newValue;
+- (void)airportStatusChange:(NSDictionary*)newValue;
 @end
 
 @implementation NetGrowlerController
@@ -28,14 +36,23 @@ static NSString *APP_NAME				= @"NetGrowler";
 	NSLog(@"Initializing");
 	
 	self = [super init];
-	self->state = S_GROWL_LAUNCHING;
+	state = S_GROWL_LAUNCHING;
+	airportStatus = nil;
+	
+	NSString *path = [[NSWorkspace sharedWorkspace] fullPathForApplication:AIRPORT_APP_NAME];
+	airportIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
 
-	// Register for IP address changes
-	self->scNotificationManager = [[IXSCNotificationManager alloc] init];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(addressChange:)
-												 name:nil
-											   object:(id)self->scNotificationManager];
+	path = [[NSWorkspace sharedWorkspace] fullPathForApplication:IP_APP_NAME];
+	ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
+	
+	scNotificationManager = [[IXSCNotificationManager alloc] init];
+	[scNotificationManager addObserver:self
+							  selector:@selector(ipAddressChange:)
+								forKey:@"State:/Network/Global/IPv4"];
+	[scNotificationManager addObserver:self
+							  selector:@selector(airportStatusChange:)
+								forKey:@"State:/Network/Interface/en1/AirPort"];
+	airportStatus = [[scNotificationManager getValueForKey:@"State:/Network/Interface/en1/AirPort"] retain];
 	
 	// Start growl
 	if (self) {
@@ -55,7 +72,10 @@ static NSString *APP_NAME				= @"NetGrowler";
 	[[NSNotificationCenter defaultCenter] removeObserver:self
 													name:nil
 												  object:self->scNotificationManager];
-	[self->scNotificationManager release];
+	[airportIcon release];
+	[airportStatus release];
+	[ipIcon release];
+	[scNotificationManager release];
 	[super dealloc];
 }
 
@@ -67,6 +87,8 @@ static NSString *APP_NAME				= @"NetGrowler";
 	NSArray *allNotes = [NSArray arrayWithObjects:
 		NOTE_IP_ACQUIRED,
 		NOTE_IP_RELEASED,
+		NOTE_AIRPORT_CONNECT,
+		NOTE_AIRPORT_DISCONNECT,
 		nil];
 	NSDictionary *regDict = [NSDictionary dictionaryWithObjectsAndKeys:
 		APP_NAME, GROWL_APP_NAME,
@@ -91,34 +113,74 @@ static NSString *APP_NAME				= @"NetGrowler";
 	}
 }
 
-- (void)addressChange:(NSNotification*)notification
+- (void)ipAddressChange:(NSDictionary*)newValue
 {
-	NSLog(@"SystemConfiguration event: '%@': %@",
-		  [notification name],
-		  [notification userInfo]);
-	if ([[notification name] isEqualToString:@"State:/Network/Global/IPv4"]) {
-		NSDictionary *scDict = [notification userInfo];
-		NSDictionary *noteDict = nil;
-		NSLog(@"IPv4 address change: %@", scDict);
-		if (scDict == NULL) {
-			noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
-				NOTE_IP_RELEASED, GROWL_NOTIFICATION_NAME,
-				APP_NAME, GROWL_APP_NAME,
-				@"IP address released", GROWL_NOTIFICATION_TITLE,
-				[NSString stringWithFormat:@"No IP address now"], GROWL_NOTIFICATION_DESCRIPTION,
-				nil];
-		} else {
-			noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
-				NOTE_IP_ACQUIRED, GROWL_NOTIFICATION_NAME,
-				APP_NAME, GROWL_APP_NAME,
-				@"IP address acquired", GROWL_NOTIFICATION_TITLE,
-				[NSString stringWithFormat:@"Have IP address now"], GROWL_NOTIFICATION_DESCRIPTION,
-				nil];
-		}
-		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:GROWL_NOTIFICATION
-																	   object:nil
-																	 userInfo:noteDict];
+	NSDictionary *noteDict = nil;
+
+	if (newValue == nil) {
+		NSLog(@"IP address released");
+		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
+			NOTE_IP_RELEASED, GROWL_NOTIFICATION_NAME,
+			APP_NAME, GROWL_APP_NAME,
+			@"IP address released", GROWL_NOTIFICATION_TITLE,
+			[NSString stringWithFormat:@"No IP address now"], GROWL_NOTIFICATION_DESCRIPTION,
+			[ipIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
+			nil];
+	} else {
+		NSLog(@"IP address acquired");
+		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
+			NOTE_IP_ACQUIRED, GROWL_NOTIFICATION_NAME,
+			APP_NAME, GROWL_APP_NAME,
+			@"IP address acquired", GROWL_NOTIFICATION_TITLE,
+			[NSString stringWithFormat:@"Have IP address now"], GROWL_NOTIFICATION_DESCRIPTION,
+			[ipIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
+			nil];
 	}
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:GROWL_NOTIFICATION
+																   object:nil
+																 userInfo:noteDict];
+}
+
+- (void)airportStatusChange:(NSDictionary*)newValue
+{
+	NSLog(@"AirPort event");
+	NSMutableDictionary *noteDict = nil;
+	if ([[airportStatus objectForKey:@"BSSID"] isEqualToData:[newValue objectForKey:@"BSSID"]]) {
+		// No change. Ignore.
+	} else if ([[newValue objectForKey:@"Link Status"] intValue] == AIRPORT_DISCONNECTED) {
+		NSString *desc = [NSString stringWithFormat:@"Left network %@.",
+			[airportStatus objectForKey:@"SSID"]];
+		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
+			NOTE_AIRPORT_DISCONNECT, GROWL_NOTIFICATION_NAME,
+			APP_NAME, GROWL_APP_NAME,
+			@"AirPort disconnected", GROWL_NOTIFICATION_TITLE,
+			desc, GROWL_NOTIFICATION_DESCRIPTION,
+			[airportIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
+			nil];
+	} else {
+		const unsigned char *bssidBytes = [[newValue objectForKey:@"BSSID"] bytes];
+		NSString *bssid = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
+			bssidBytes[0],
+			bssidBytes[1],
+			bssidBytes[2],
+			bssidBytes[3],
+			bssidBytes[4],
+			bssidBytes[5]];
+		NSString *desc = [NSString stringWithFormat:@"Joined network.\nSSID: %@\nBSSID: %@",
+													[newValue objectForKey:@"SSID"],
+													bssid];
+		noteDict = [NSDictionary dictionaryWithObjectsAndKeys:
+			NOTE_AIRPORT_CONNECT, GROWL_NOTIFICATION_NAME,
+			APP_NAME, GROWL_APP_NAME,
+			@"AirPort connected", GROWL_NOTIFICATION_TITLE,
+			desc, GROWL_NOTIFICATION_DESCRIPTION,
+			[airportIcon TIFFRepresentation], GROWL_NOTIFICATION_ICON,
+			nil];
+	}
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:GROWL_NOTIFICATION
+																   object:nil
+																 userInfo:noteDict];
+	airportStatus = [newValue retain];
 }
 
 @end

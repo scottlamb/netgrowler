@@ -18,6 +18,9 @@ typedef enum {
 @interface NetGrowlerController : NSObject {
 	State state;
 	IXSCNotificationManager *scNotificationManager;
+	NSMutableDictionary *airportStatus;
+	NSImage *airportIcon;
+	NSImage *ipIcon;
 }
 
 @end

@@ -23,14 +23,22 @@
 @interface IXSCNotificationManager : NSObject {
 	SCDynamicStoreRef dynStore;
 	CFRunLoopSourceRef rlSrc;
+	
+	// Dictionary of watched key names (NSString) to observers (internal Observer class)
+	NSMutableDictionary *watchedKeysDict;
 }
+
+- (NSDictionary*)getValueForKey:(NSString*)aKey;
+- (void)addObserver:(id)anObserver selector:(SEL)aSelector forKey:(NSString*)aKey;
 
 @end
 
+@interface SLObserver : NSObject
+{
+	id observer;
+	SEL selector;
+}
 
-/*!
- * @function       _IXSCNotificationCallback
- * @abstract       Callback for the dynamic store, just calls keysChanged: on 
- *                 the notification center.
- */
-void _IXSCNotificationCallback(SCDynamicStoreRef store, CFArrayRef changedKeys, void *info);
++ observer:(id)anObserver withSelector:(SEL)aSelector;
+
+@end
