@@ -1,6 +1,6 @@
 $Id$
 
-NetGrowler 0.1.1 (released 3 Mar 2005)
+NetGrowler 0.2.0 (released 3 Mar 2005)
 ----------------
 
 * Upgraded to Growl 0.6.1 (Growl.framework) from 0.5 (GrowlAppBridge.framework)
