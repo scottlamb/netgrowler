@@ -7,6 +7,12 @@
 	objects = {
 		080E96DDFE201D6D7F000001 = {
 			children = (
+				656F1A3708163F9D00B0F1CA,
+				656F1A3808163F9D00B0F1CA,
+				656F1A2908163C6C00B0F1CA,
+				656F1A2A08163C6C00B0F1CA,
+				658B5F910816375400781092,
+				658B5F920816375400781092,
 				659C0B890774BEF3004F30A4,
 				659C0B8A0774BEF3004F30A4,
 				654DA6C006DF00BA0052FACD,
@@ -261,7 +267,7 @@
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Growl.framework;
-			path = /Users/slamb/svn/growl/build/Growl.framework;
+			path = /Users/slamb/Library/Frameworks/Growl.framework;
 			refType = 0;
 			sourceTree = "<absolute>";
 		};
@@ -311,6 +317,90 @@
 		};
 		654DA6C306DF00BA0052FACD = {
 			fileRef = 654DA6C106DF00BA0052FACD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		656F1A2908163C6C00B0F1CA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = EthernetObserver.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		656F1A2A08163C6C00B0F1CA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = EthernetObserver.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		656F1A2B08163C6C00B0F1CA = {
+			fileRef = 656F1A2908163C6C00B0F1CA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		656F1A2C08163C6C00B0F1CA = {
+			fileRef = 656F1A2A08163C6C00B0F1CA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		656F1A3708163F9D00B0F1CA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = IPv4Observer.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		656F1A3808163F9D00B0F1CA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = IPv4Observer.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		656F1A3908163F9D00B0F1CA = {
+			fileRef = 656F1A3708163F9D00B0F1CA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		656F1A3A08163F9D00B0F1CA = {
+			fileRef = 656F1A3808163F9D00B0F1CA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		658B5F910816375400781092 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AirportObserver.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		658B5F920816375400781092 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = AirportObserver.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		658B5F930816375400781092 = {
+			fileRef = 658B5F910816375400781092;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		658B5F940816375400781092 = {
+			fileRef = 658B5F920816375400781092;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -412,6 +502,9 @@
 				8D1107280486CEB800E47090,
 				654DA6C206DF00BA0052FACD,
 				659C0B8B0774BEF3004F30A4,
+				658B5F930816375400781092,
+				656F1A2B08163C6C00B0F1CA,
+				656F1A3908163F9D00B0F1CA,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,6 +535,9 @@
 				8D11072D0486CEB800E47090,
 				654DA6C306DF00BA0052FACD,
 				659C0B8C0774BEF3004F30A4,
+				658B5F940816375400781092,
+				656F1A2C08163C6C00B0F1CA,
+				656F1A3A08163F9D00B0F1CA,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2004 Scott Lamb <slamb@slamb.org>
+ * Copyright (C) 2004-2005 Scott Lamb <slamb@slamb.org>.
  * This file is part of NetGrowler, which is released under the MIT license.
  */
 
@@ -32,7 +32,15 @@
 
 /**
  * Monitors a single key for changes.
+ * On change, the given selector will be called with the key name.
  */
 - (void)addObserver:(id)anObserver selector:(SEL)aSelector forKey:(NSString*)aKey;
+
+/**
+ * Monitors a pattern of key for changes.
+ * On change, the given selector will be called with the key name.
+ * Accepts a regex(3) regular expression pattern.
+ */
+-(void)addObserver:(id)anObserver selector:(SEL)aSelector forKeyPattern:(NSString*)aKeyPattern;
 
 @end

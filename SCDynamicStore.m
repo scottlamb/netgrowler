@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2004 Scott Lamb <slamb@slamb.org>
+ * Copyright (C) 2004-2005 Scott Lamb <slamb@slamb.org>.
  * This file is part of NetGrowler, which is released under the MIT license.
  */
 
@@ -61,11 +61,10 @@ static void scCallback(SCDynamicStoreRef dynStore, CFArrayRef changedKeys, void 
 	while (key = [keysE nextObject]) {
 		NSEnumerator *observers = [[self->watchedKeysDict objectForKey:key] objectEnumerator];
 		SLObserver *o = nil;
-		NSDictionary *newValue = [(NSDictionary*) SCDynamicStoreCopyValue(dynStore, (CFStringRef) key) autorelease];
-		
+
 		while (o = [observers nextObject]) {
 			[[o observer] performSelector:[o selector]
-							   withObject:newValue];
+							   withObject:key];
 		}
 	}
 }
@@ -113,6 +112,17 @@ static void scCallback(SCDynamicStoreRef dynStore, CFArrayRef changedKeys, void 
 	SCDynamicStoreSetNotificationKeys(dynStore,
 									  (CFArrayRef) [watchedKeysDict allKeys],
 									  NULL);
+}
+
+- (void)addObserver:(id)anObserver selector:(SEL)aSelector forKeyPattern:(NSString*)aKeyPattern
+{
+	NSArray *matchingKeys = [(NSArray*) SCDynamicStoreCopyKeyList(dynStore, (CFStringRef) aKeyPattern) autorelease];
+	NSEnumerator *keysE = [matchingKeys objectEnumerator];
+	NSString *key = nil;
+
+	while (key = [keysE nextObject]) {
+		[self addObserver:anObserver selector:aSelector forKey:key];
+	}
 }
 
 - (void)dealloc {
