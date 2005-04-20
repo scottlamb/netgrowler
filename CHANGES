@@ -1,11 +1,19 @@
 $Id$
 
+
+NetGrowler 0.2.1 (not yet released)
+----------------
+
+* Code reorganization.
+
+
 NetGrowler 0.2.0 (released 3 Mar 2005)
 ----------------
 
 * Upgraded to Growl 0.6.1 (Growl.framework) from 0.5 (GrowlAppBridge.framework)
 
 * Added type to IP address notifications. (Public, private, link-local, etc.)
+
 
 NetGrowler 0.1.0 (released 4 Feb 2005)
 ----------------
