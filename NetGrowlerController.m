@@ -46,7 +46,7 @@ static NSString *APP_NAME                       = @"NetGrowler.app";
 		} plugins[] = {
 			{ @"Ethernet",		[EthernetObserver class] },
 			{ @"AirPort",		[AirportObserver class] },
-			{ @"PPP",			[PPPObserver class] },
+			// buggy: { @"PPP",			[PPPObserver class] },
 			{ nil,				nil }
 		};
 		int i;

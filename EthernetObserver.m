@@ -39,7 +39,9 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 		ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
 
 		// Find our interface name
-		/*NSString *interfaceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", aService];
+		/*//aService = @"0";
+		NSString *interfaceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", aService];
+		//NSString *interfaceKey = @"Setup:/Network/Service/0/Interface";
 		NSLog(@"interfaceKey = '%@'", interfaceKey);
 		NSDictionary *interfaceValue = [dynStore valueForKey:interfaceKey];
 		NSLog(@"value is %@", interfaceValue);
