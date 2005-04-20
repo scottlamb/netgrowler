@@ -9,12 +9,16 @@
 
 @class SCDynamicStore, NSImage;
 
-@interface EthernetObserver : NSObject
+/**
+ * Watches for changes on a PPP interface.
+ * I've only tested with a PPTP VPN (Virtual Private Network).
+ */
+@interface PPPObserver : NSObject
 {
+	NSString *service;
 	SCDynamicStore *dynStore;
-	NSString *interface;
+	NSDictionary *currentStatus;
 	NSImage *ipIcon;
-	Boolean currentActive;
 }
 
 - (id)initWithService:(NSString*)service andStore:(SCDynamicStore*)store;

@@ -17,14 +17,15 @@
 
 @implementation AirportObserver
 
-- (id)initWithInterface:(NSString*)anInterface andStore:(SCDynamicStore*)aDynStore {
+- (id)initWithService:(NSString*)aService andStore:(SCDynamicStore*)aDynStore {
 	self = [super init];
 
 	if (self) {
-		NSLog(@"Initializing AirPortObserver for interface %@", anInterface);
-		interface = [anInterface retain];
 		dynStore = [aDynStore retain];
+		NSString *interfaceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", aService];
+		interface = [[[dynStore valueForKey:interfaceKey] valueForKey:@"DeviceName"] retain];
 
+		NSLog(@"Initializing AirPortObserver for interface %@", interface);
 		NSString *airportKey = [NSString stringWithFormat:@"State:/Network/Interface/%@/AirPort", interface];
 		currentStatus = [dynStore valueForKey:airportKey];
 		[dynStore addObserver:self
@@ -49,15 +50,19 @@
 
 - (void)airportStatusChange:(NSString*)keyName {
 	NSDictionary *newStatus = [dynStore valueForKey:keyName];
+	int LINK_DISCONNECTED = 1;
+	int newLink = [[newStatus objectForKey:@"Link Status"] intValue];
 	NSData *oldBSSID = [currentStatus objectForKey:@"BSSID"];
 	NSData *newBSSID = [newStatus objectForKey:@"BSSID"];
 	
-	if ([oldBSSID isEqualToData:newBSSID]) {
+	if ((currentStatus == nil && newLink == LINK_DISCONNECTED) || [oldBSSID isEqualToData:newBSSID]) {
 		// I seem to get a couple bogus notifications before joining a new network. Not sure why.
+		// Also suppress disconnect message on waking.
 		NSLog(@"Suppressed boring airportStatusChange");
 	} else {
-		if ([[newStatus objectForKey:@"Link Status"] intValue] == 1 /* disconnected */) {
+		if (newLink == LINK_DISCONNECTED) {
 			NSString *desc = [NSString stringWithFormat:@"Left network %@.", [currentStatus objectForKey:@"SSID"]];
+			NSLog(@"Sending notification: AirPort disconnected");
 			[GrowlApplicationBridge notifyWithTitle:@"AirPort disconnected"
 										description:desc
 								   notificationName:NOTE_AIRPORT_DISCONNECT
@@ -77,6 +82,7 @@
 			NSString *desc = [NSString stringWithFormat:@"Joined network.\nSSID:\t\t%@\nBSSID:\t%@",
 														[newStatus objectForKey:@"SSID"],
 														bssid];
+			NSLog(@"Sending notification: AirPort connected");
 			[GrowlApplicationBridge notifyWithTitle:@"AirPort connected"
 										description:desc
 								   notificationName:NOTE_AIRPORT_DISCONNECT
@@ -89,6 +95,12 @@
 		[currentStatus release];
 		currentStatus = [newStatus retain];
 	}
+}
+
+- (void)sleep {
+	//NSLog(@"AirPortObserver noting pending sleep");
+	[currentStatus release];
+	currentStatus = nil;
 }
 
 @end

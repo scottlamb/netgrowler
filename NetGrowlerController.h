@@ -6,19 +6,23 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "SCDynamicStore.h"
 #import <Growl/GrowlApplicationBridge.h>
 
-#define NOTE_LINK_UP				@"Link-Up"
-#define NOTE_LINK_DOWN				@"Link-Down"
+#define NOTE_ETHERNET_LINK_UP		@"Ethernet-Link-Up"
+#define NOTE_ETHERNET_LINK_DOWN		@"Ethernet-Link-Down"
+#define NOTE_PPP_LINK_UP			@"PPP-Link-Up"
+#define NOTE_PPP_LINK_DOWN			@"PPP-Link-Up"
 #define NOTE_IP_ACQUIRED			@"IP-Acquired"
 #define NOTE_IP_RELEASED			@"IP-Released"
 #define NOTE_AIRPORT_CONNECT		@"AirPort-Connect"
 #define NOTE_AIRPORT_DISCONNECT		@"AirPort-Disconnect"
 
+@class SCDynamicStore, PowerNotifier;
+
 @interface NetGrowlerController : NSObject <GrowlApplicationBridgeDelegate> {
 	SCDynamicStore *scNotificationManager;
 	NSMutableArray *observers;
+	PowerNotifier *powerNotifier;
 }
 
 - (NSDictionary*) registrationDictionaryForGrowl;

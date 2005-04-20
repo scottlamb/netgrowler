@@ -30,19 +30,32 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 
 @implementation EthernetObserver
 
-- (id)initWithInterface:(NSString*)anInterface andStore:(SCDynamicStore*)aDynStore {
+- (id)initWithService:(NSString*)aService andStore:(SCDynamicStore*)aDynStore {
 	self = [super init];
 
 	if (self) {
+		// Load the icon
 		NSString *path = [[NSWorkspace sharedWorkspace] fullPathForApplication:IP_APP_NAME];
 		ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
 
-		interface = [anInterface retain];
+		// Find our interface name
+		/*NSString *interfaceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", aService];
+		NSLog(@"interfaceKey = '%@'", interfaceKey);
+		NSDictionary *interfaceValue = [dynStore valueForKey:interfaceKey];
+		NSLog(@"value is %@", interfaceValue);
+		interface = [[[dynStore valueForKey:interfaceKey] valueForKey:@"DeviceName"] retain];*/
+		
+		// XXX: don't know why the above doesn't work. I'll hardcode so it at least works on my machine.
+		interface = [[NSString alloc] initWithString:@"en0"];
+
 		NSLog(@"Initializing EthernetObserver for interface %@", interface);
 		dynStore = [aDynStore retain];
+		
+		NSString *linkKey = [NSString stringWithFormat:@"State:/Network/Interface/%@/Link", interface];
+		currentActive = CFBooleanGetValue((CFBooleanRef) [[dynStore valueForKey:linkKey] objectForKey:@"Active"]);
 		[dynStore addObserver:self
 					 selector:@selector(linkStatusChange:)
-					   forKey:@"State:/Network/Interface/en0/Link"];		
+					   forKey:linkKey];		
 	}
 
 	return self;
@@ -57,27 +70,33 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 
 - (void)linkStatusChange:(NSString*)keyName
 {
-	NSDictionary *newValue = [dynStore valueForKey:keyName];
-	Boolean active = CFBooleanGetValue((CFBooleanRef) [newValue objectForKey:@"Active"]);
+	NSDictionary *newStatus = [dynStore valueForKey:keyName];
+	Boolean newActive = CFBooleanGetValue((CFBooleanRef) [newStatus objectForKey:@"Active"]);
 	
-	if (active) {
+	if (currentActive == newActive) {
+		NSLog(@"Suppressed boring Ethernet notification");
+	} else if (newActive) {
 		NSString *media = [self media];
+		NSLog(@"Sending notification: Ethernet activated");
 		[GrowlApplicationBridge notifyWithTitle:@"Ethernet activated"
-									description:[NSString stringWithFormat:@"Interface:\ten0\nMedia:\t%@", media]
-							   notificationName:NOTE_LINK_UP
+									description:[NSString stringWithFormat:@"Interface:\t%@\nMedia:\t%@", interface, media]
+							   notificationName:NOTE_ETHERNET_LINK_UP
 									   iconData:[ipIcon TIFFRepresentation]
 									   priority:0
 									   isSticky:NO
 								   clickContext:nil];
 	} else {
+		NSLog(@"Sending notification: Ethernet deactivated");
 		[GrowlApplicationBridge notifyWithTitle:@"Ethernet deactivated"
-									description:[NSString stringWithFormat:@"Interface:\ten0"]
-							   notificationName:NOTE_LINK_DOWN
+									description:[NSString stringWithFormat:@"Interface:\t%@", interface]
+							   notificationName:NOTE_ETHERNET_LINK_DOWN
 									   iconData:[ipIcon TIFFRepresentation]
 									   priority:0
 									   isSticky:NO
 								   clickContext:nil];
-	}		
+	}
+
+	currentActive = newActive;
 }
 
 - (NSString*)media {
@@ -131,6 +150,10 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	
 	return (options == nil) ? [NSString stringWithCString:type]
 							: [NSString stringWithFormat:@"%s <%@>", type, options];
+}
+
+- (void)sleep {
+	currentActive = NO;
 }
 
 @end

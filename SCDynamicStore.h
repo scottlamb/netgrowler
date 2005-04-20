@@ -25,6 +25,12 @@
 }
 
 /**
+ * Finds the keys matching the given pattern.
+ * Accepts a regex(3) regular expression pattern.
+ */
+- (NSArray*)keysForPattern:(NSString*)aPattern;
+
+/**
  * Retrieves the value of the specified key.
  * @return The key's dictionary of values, or null if the key is not found.
  */

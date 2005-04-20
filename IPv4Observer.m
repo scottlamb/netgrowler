@@ -21,6 +21,7 @@
 @interface IPv4Observer (PRIVATE)
 - (void)statusChange:(NSString*)keyName;
 - (NSString*)typeOfIP:(NSString*)ip;
+- (NSString*)getPrimaryIP;
 @end
 
 @implementation IPv4Observer
@@ -38,6 +39,7 @@
 
 		NSString *path = [[NSWorkspace sharedWorkspace] fullPathForApplication:IP_APP_NAME];
 		ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
+		//currentPrimaryIP = [self getPrimaryIP];
 	}
 
 	return self;
@@ -47,13 +49,30 @@
 	// XXX: should remove observer
 	[dynStore release];
 	[ipIcon release];
+	//[currentPrimaryIP release];
 }
 
-- (void)statusChange:(NSString*)keyName
-{
-	NSDictionary *newValue = [dynStore valueForKey:keyName];
-	if (newValue == nil) {
-		//NSLog(@"IP address released");
+- (NSString*)getPrimaryIP {
+	NSDictionary *newValue = [dynStore valueForKey:@"State:/Network/Global/IPv4"];
+	NSString *primaryIP = nil;
+	if (newValue != nil) {
+		NSString *ipv4Key = [NSString stringWithFormat:@"State:/Network/Interface/%@/IPv4",
+			[newValue valueForKey:@"PrimaryInterface"]];
+		NSDictionary *ipv4Info = [dynStore valueForKey:ipv4Key];
+		NSArray *addrs = [ipv4Info valueForKey:@"Addresses"];
+		if ([addrs count] > 0) {
+			// (A count of zero happens on VPN connect, apparently.)
+			primaryIP = [addrs objectAtIndex:0];
+		}
+	}
+	return primaryIP;
+}
+
+- (void)statusChange:(NSString*)keyName {
+	NSString *newPrimaryIP = [self getPrimaryIP];
+
+	if (newPrimaryIP == nil) {
+		NSLog(@"Sending notification: IP address released");
 		[GrowlApplicationBridge notifyWithTitle:@"IP address released"
 									description:[NSString stringWithFormat:@"No IP address now"]
 							   notificationName:NOTE_IP_RELEASED
@@ -62,21 +81,19 @@
 									   isSticky:NO
 								   clickContext:nil];
 	} else {
-		//NSLog(@"IP address acquired");
-		NSString *ipv4Key = [NSString stringWithFormat:@"State:/Network/Interface/%@/IPv4",
-			[newValue valueForKey:@"PrimaryInterface"]];
-		NSDictionary *ipv4Info = [dynStore valueForKey:ipv4Key];
-		NSArray *addrs = [ipv4Info valueForKey:@"Addresses"];
-		NSAssert([addrs count] > 0, @"Empty address array");
-		NSString *primaryIP = [addrs objectAtIndex:0];
+		NSLog(@"Sending notification: IP address acquired");
 		[GrowlApplicationBridge notifyWithTitle:@"IP address changed"
-									description:[NSString stringWithFormat:@"New primary IP.\nType:\t%@\nAddress:\t%@", [self typeOfIP:primaryIP], primaryIP]
+									description:[NSString stringWithFormat:@"New primary IP.\nType:\t%@\nAddress:\t%@",
+																		   [self typeOfIP:newPrimaryIP],
+																		   newPrimaryIP]
 							   notificationName:NOTE_IP_ACQUIRED
 									   iconData:[ipIcon TIFFRepresentation]
 									   priority:0
 									   isSticky:NO
 								   clickContext:nil];
 	}
+	//[currentPrimaryIP release];
+	//currentPrimaryIP = [newPrimaryIP retain];
 }
 
 - (NSString*) typeOfIP:(NSString*)ipString {
@@ -116,6 +133,11 @@
 		}
 	}
 	return @"Public";
+}
+
+- (void)sleep {
+	//[currentPrimaryIP release];
+	//currentPrimaryIP = nil;
 }
 
 @end

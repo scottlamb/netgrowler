@@ -7,6 +7,12 @@
 	objects = {
 		080E96DDFE201D6D7F000001 = {
 			children = (
+				6552D03408166800007B5824,
+				6552D03508166800007B5824,
+				6552D03608166800007B5824,
+				6552D03708166800007B5824,
+				656F1A570816436100B0F1CA,
+				656F1A580816436100B0F1CA,
 				656F1A3708163F9D00B0F1CA,
 				656F1A3808163F9D00B0F1CA,
 				656F1A2908163C6C00B0F1CA,
@@ -53,6 +59,7 @@
 //104
 		1058C7A0FEA54F0111CA2CBB = {
 			children = (
+				656F1B37081661FE00B0F1CA,
 				6537695A07B5A74000947437,
 				65D17AD407737296002A10A1,
 				1058C7A1FEA54F0111CA2CBB,
@@ -264,8 +271,8 @@
 //653
 //654
 		6537695A07B5A74000947437 = {
+			explicitFileType = wrapper.framework;
 			isa = PBXFileReference;
-			lastKnownFileType = wrapper.framework;
 			name = Growl.framework;
 			path = /Users/slamb/Library/Frameworks/Growl.framework;
 			refType = 0;
@@ -317,6 +324,62 @@
 		};
 		654DA6C306DF00BA0052FACD = {
 			fileRef = 654DA6C106DF00BA0052FACD;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6552D03408166800007B5824 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = PowerNotifier.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6552D03508166800007B5824 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = PowerNotifier.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6552D03608166800007B5824 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = SimpleObserver.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6552D03708166800007B5824 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SimpleObserver.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6552D03808166800007B5824 = {
+			fileRef = 6552D03408166800007B5824;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6552D03908166800007B5824 = {
+			fileRef = 6552D03508166800007B5824;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6552D03A08166800007B5824 = {
+			fileRef = 6552D03608166800007B5824;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6552D03B08166800007B5824 = {
+			fileRef = 6552D03708166800007B5824;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -373,6 +436,48 @@
 		};
 		656F1A3A08163F9D00B0F1CA = {
 			fileRef = 656F1A3808163F9D00B0F1CA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		656F1A570816436100B0F1CA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = PPPObserver.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		656F1A580816436100B0F1CA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = PPPObserver.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		656F1A590816436100B0F1CA = {
+			fileRef = 656F1A570816436100B0F1CA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		656F1A5A0816436100B0F1CA = {
+			fileRef = 656F1A580816436100B0F1CA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		656F1B37081661FE00B0F1CA = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = IOKit.framework;
+			path = /System/Library/Frameworks/IOKit.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		656F1B38081661FE00B0F1CA = {
+			fileRef = 656F1B37081661FE00B0F1CA;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -505,6 +610,9 @@
 				658B5F930816375400781092,
 				656F1A2B08163C6C00B0F1CA,
 				656F1A3908163F9D00B0F1CA,
+				656F1A590816436100B0F1CA,
+				6552D03808166800007B5824,
+				6552D03A08166800007B5824,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -538,6 +646,9 @@
 				658B5F940816375400781092,
 				656F1A2C08163C6C00B0F1CA,
 				656F1A3A08163F9D00B0F1CA,
+				656F1A5A0816436100B0F1CA,
+				6552D03908166800007B5824,
+				6552D03B08166800007B5824,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -556,6 +667,7 @@
 				8D11072F0486CEB800E47090,
 				65D17AD507737296002A10A1,
 				6537695B07B5A74000947437,
+				656F1B38081661FE00B0F1CA,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

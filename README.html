@@ -38,14 +38,8 @@ NetGrowler.</p>
 <h2>Known Problems</h2>
 
 <ol>
-<li>It's overly noisy when waking from sleep. It tells you that your wireless
-    connection went away and came back, that the Ethernet connection was
-    disconnected, and that an IP was released and reacquired. I should monitor
-    for system wake notifications and set a timer to calm this down.</li>
-<li>The interface names are hardcoded &mdash; this could cause problems with
-    machines that don't have a single Ethernet port as <tt>en0</tt> and a
-    single AirPort as <tt>en1</tt>.</li>
-<li>It doesn't track your primary IP very well yet.</li>
+<li>It expects a Ethernet interface at "en0". If your system has only an
+    AirPort, this might cause problems.</li>
 </ol>
 
 <p>All of these are solvable with just a little effort. Feel free to do so

@@ -19,5 +19,6 @@
 	NSDictionary *currentStatus;
 }
 
-- (id)initWithInterface:(NSString*)name andStore:(SCDynamicStore*)dynStore;
+- (id)initWithService:(NSString*)service andStore:(SCDynamicStore*)dynStore;
+- (void)sleep;
 @end
