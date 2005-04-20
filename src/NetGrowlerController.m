@@ -14,6 +14,7 @@
 #import "AirportObserver.h"
 #import "PPPObserver.h"
 #import <Growl/GrowlApplicationBridge.h>
+#import <Cocoa/Cocoa.h>
 
 static NSString *APP_NAME                       = @"NetGrowler.app";
 

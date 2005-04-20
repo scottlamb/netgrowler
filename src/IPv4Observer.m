@@ -5,16 +5,16 @@
  * This file is part of NetGrowler, which is released under the MIT license.
  */
 
+#import "IPv4Observer.h"
+#import "SCDynamicStore.h"
+#import "NetGrowlerController.h"
+#import <Cocoa/Cocoa.h>
+
 // Type of address stuff
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-
-// Everything else
-#import "IPv4Observer.h"
-#import "SCDynamicStore.h"
-#import "NetGrowlerController.h"
 
 #define IP_APP_NAME                    @"Internet Connect.app"
 

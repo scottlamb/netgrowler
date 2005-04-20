@@ -8,6 +8,7 @@
 #import "PPPObserver.h"
 #import "SCDynamicStore.h"
 #import "NetGrowlerController.h"
+#import <Cocoa/Cocoa.h>
 
 #define IP_APP_NAME                    @"Internet Connect.app"
 

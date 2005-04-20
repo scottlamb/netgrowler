@@ -8,6 +8,7 @@
 #import "AirportObserver.h"
 #import "SCDynamicStore.h"
 #import "NetGrowlerController.h"
+#import <Cocoa/Cocoa.h>
 
 #define AIRPORT_APP_NAME @"Airport Admin Utility.app"
 

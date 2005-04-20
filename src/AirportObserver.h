@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class SCDynamicStore;
+@class SCDynamicStore, NSImage;
 
 @interface AirportObserver : NSObject
 {

@@ -5,6 +5,11 @@
  * This file is part of NetGrowler, which is released under the MIT license.
  */
 
+#import "EthernetObserver.h"
+#import "SCDynamicStore.h"
+#import "NetGrowlerController.h"
+#import <Cocoa/Cocoa.h>
+
 // Media stuff
 #import <sys/socket.h>
 #import <sys/sockio.h>
@@ -12,11 +17,6 @@
 #import <net/if.h>
 #import <net/if_media.h>
 #import <unistd.h>
-
-// Other includes
-#import "EthernetObserver.h"
-#import "SCDynamicStore.h"
-#import "NetGrowlerController.h"
 
 #define IP_APP_NAME                    @"Internet Connect.app"
 
