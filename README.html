@@ -8,10 +8,10 @@
 
 <h2>Introduction</h2>
 
-<p>This is NetGrowler version <b>0.2.1-dev</b>, which displays on-screen
-notifications of network events (AirPort connect/disconnect, IP address
-changes, etc.) on an OS X machine through the
-<a href="http://growl.info">Growl</a> framework.</p>
+<p>This is <a href="http://www.slamb.org/projects/netgrowler/">NetGrowler</a>
+version <b>0.2.1-dev</b>, which displays on-screen notifications of network
+events (AirPort connect/disconnect, IP address changes, etc.) on an OS X
+machine through the <a href="http://growl.info">Growl</a> framework.</p>
 
 <p>NetGrowler is released under the MIT license, the full text of which is
 below.</p>
@@ -40,14 +40,40 @@ NetGrowler.</p>
 
 <ol>
 <li>It expects a Ethernet interface at "en0". If your system has only an
-    AirPort, this might cause problems.</li>
+    AirPort, this might cause problems. (See the "XXX" in
+    EthernetObserver.m.)</li>
 </ol>
 
-<p>All of these are solvable with just a little effort. Feel free to do so
-yourself and <a href="mailto:slamb@slamb.org">send patches</a>.</p>
+<p>Feel free to fix these and
+<a href="mailto:slamb@slamb.org">send patches</a>.</p>
 
 <p>If you find any other problems, please <a href="mailto:slamb@slamb.org">let
 me know</a>.</p>
+
+<h2>Future Enhancements</h2>
+
+<p>Here are some enhancements I'm thinking about:
+
+<ol>
+<li>I could make a SystemPreferences pane, so there's an easier way to see if
+    it's running and start/stop it. It'd also be a place to
+    put&hellip;preferences. See the next point.</li>
+<li>I could add in a way to assign friendly names to wireless networks (as
+    a mapping to BSSID internally). Then you'd be able to distinguish
+    between all the networks named "linksys" without guessing or memorizing
+    their BSSIDs.</li>
+<li>I learned from
+    <a href="http://www.cocoadev.com/index.pl?AppleEightOhTwoEleven">this
+    CocoaDev page</a> how to get a lot more information on AirPort networks.
+    Base speed (11Mbps or 54Mbps), signal strength, channel, etc.
+    I don't want to clutter the screen too much, so I have to decide what's
+    most useful.</li>
+<li>I could add localization support. I'd need help with this, as English
+    is the only language I speak well. I have noticed a lot of downloads
+    from Japan. Anyone?</li>
+</ol>
+
+<p>You're welcome to send patches for new features, too.</p>
 
 <h2>Acknowledgements</h2>
 
