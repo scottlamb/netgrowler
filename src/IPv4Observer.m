@@ -50,6 +50,7 @@
 	[dynStore release];
 	[ipIcon release];
 	//[currentPrimaryIP release];
+	[super dealloc];
 }
 
 - (NSString*)getPrimaryIP {
@@ -125,7 +126,7 @@
 		if (inet_pton(AF_INET, types[i].network, &network_addr) <= 0) {
 			NSAssert(NO, @"Unable to parse network IP address.");
 		}
-		int mask = ~((1<<types[i].bits) - 1);
+		int mask = ~((1 << (32 - types[i].bits)) - 1);
 		//NSLog(@"Comparing address %13@ (%08x) against %13s (%08x), mask %2d (%08x), type %@",
 		//	  ipString, addr, types[i].network, network_addr, types[i].bits, mask, types[i].type);
 		if ((network_addr.s_addr & mask) == (addr.s_addr & mask)) {

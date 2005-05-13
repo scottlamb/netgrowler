@@ -1,7 +1,16 @@
 $Id$
 
 
-NetGrowler 0.2.1 (not yet released)
+NetGrowler 0.2.2 (not yet released)
+----------------
+
+* Fixed error encountered by Augie Fackler <rafackler@hillsdale.edu>:
+  Masks other than /16 were not calculated correctly. In particular,
+  10.x.y.z, for x.y != 0.0, was not considered as being within the RFC1918
+  address range 10.0.0.0/8.
+
+
+NetGrowler 0.2.1 (released 20 Apr 2005)
 ----------------
 
 * Less noise on waking from sleep.
