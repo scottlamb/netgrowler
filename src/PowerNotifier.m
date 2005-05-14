@@ -50,7 +50,7 @@ static void sleepCallback(void *unused1, io_service_t unused2, natural_t message
 		sleepObservers = [[NSMutableArray alloc] init];
 		wakeObservers = [[NSMutableArray alloc] init];
 		root_port = IORegisterForSystemPower(0, &notifyPortRef, sleepCallback, &notifier);
-		NSAssert(root_port != NULL, @"System power registration failed");
+		NSAssert(root_port != 0, @"System power registration failed");
 		src = IONotificationPortGetRunLoopSource(notifyPortRef);
 		CFRunLoopAddSource(CFRunLoopGetCurrent(), src, kCFRunLoopCommonModes);
 	}
@@ -65,6 +65,7 @@ static void sleepCallback(void *unused1, io_service_t unused2, natural_t message
 	[sleepObservers release];
 	sleepObservers = nil;
 	myself = nil;
+	[super dealloc];
 }
 
 + (id)powerNotifier {
@@ -74,11 +75,11 @@ static void sleepCallback(void *unused1, io_service_t unused2, natural_t message
 	return [myself autorelease];
 }
 
-- (id)addSleepObserver:(id)object withSelector:(SEL)aSelector {
+- (void)addSleepObserver:(id)object withSelector:(SEL)aSelector {
 	[sleepObservers addObject:[SimpleObserver observer:object withSelector:aSelector]];
 }
 
-- (id)addWakeObserver:(id)object withSelector:(SEL)aSelector {
+- (void)addWakeObserver:(id)object withSelector:(SEL)aSelector {
 	[wakeObservers addObject:[SimpleObserver observer:object withSelector:aSelector]];
 }
 

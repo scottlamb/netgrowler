@@ -9,6 +9,8 @@ NetGrowler 0.2.2 (not yet released)
   10.x.y.z, for x.y != 0.0, was not considered as being within the RFC1918
   address range 10.0.0.0/8.
 
+* Eliminated some warnings when compiling under Tiger.
+
 
 NetGrowler 0.2.1 (released 20 Apr 2005)
 ----------------

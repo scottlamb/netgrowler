@@ -29,6 +29,6 @@
  */
 + (id)powerNotifier;
 
-- (id)addSleepObserver:(id)object withSelector:(SEL)selector;
-- (id)addWakeObserver:(id)object withSelector:(SEL)selector;
+- (void)addSleepObserver:(id)object withSelector:(SEL)selector;
+- (void)addWakeObserver:(id)object withSelector:(SEL)selector;
 @end

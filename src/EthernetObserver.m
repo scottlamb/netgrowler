@@ -68,6 +68,7 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	[dynStore release];
 	[interface release];
 	[ipIcon release];
+	[super dealloc];
 }
 
 - (void)linkStatusChange:(NSString*)keyName

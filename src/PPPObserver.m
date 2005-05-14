@@ -43,6 +43,7 @@
 	[dynStore release];
 	[service release];
 	[currentStatus release];
+	[super dealloc];
 }
 
 - (void)statusChange:(NSString*)keyName {

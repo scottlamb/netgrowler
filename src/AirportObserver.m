@@ -47,6 +47,7 @@
 	[dynStore release];
 	[currentStatus release];
 	[airportIcon release];
+	[super dealloc];
 }
 
 - (void)airportStatusChange:(NSString*)keyName {
