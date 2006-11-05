@@ -6,7 +6,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <Growl/GrowlApplicationBridge.h>
+#import <Growl/Growl.h>
 
 #define NOTE_ETHERNET_LINK_UP		@"Ethernet-Link-Up"
 #define NOTE_ETHERNET_LINK_DOWN		@"Ethernet-Link-Down"
