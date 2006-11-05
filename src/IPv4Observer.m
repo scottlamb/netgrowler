@@ -128,8 +128,11 @@
 		}
 		int mask = ~((1 << (32 - types[i].bits)) - 1);
 		//NSLog(@"Comparing address %13@ (%08x) against %13s (%08x), mask %2d (%08x), type %@",
-		//	  ipString, addr, types[i].network, network_addr, types[i].bits, mask, types[i].type);
-		if ((network_addr.s_addr & mask) == (addr.s_addr & mask)) {
+		//	    ipString, ntohl(addr.s_addr), types[i].network,
+		//	    ntohl(network_addr.s_addr), types[i].bits, mask,
+		//	    types[i].type);
+		if ((ntohl(network_addr.s_addr) & mask) ==
+			(ntohl(        addr.s_addr) & mask)) {
 			return types[i].type;
 		}
 	}
