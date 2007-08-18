@@ -27,6 +27,7 @@
 		6552D18908167F87007B5824 /* SimpleObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6552D17708167F87007B5824 /* SimpleObserver.m */; };
 		6552D18C08167F97007B5824 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6552D18A08167F97007B5824 /* main.m */; };
 		656F1B38081661FE00B0F1CA /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 656F1B37081661FE00B0F1CA /* IOKit.framework */; };
+		659BA39A0C76BC7600FAFF44 /* NetGrowler.icns in Resources */ = {isa = PBXBuildFile; fileRef = 659BA3990C76BC7600FAFF44 /* NetGrowler.icns */; };
 		65D17AD507737296002A10A1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D17AD407737296002A10A1 /* SystemConfiguration.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -69,6 +70,7 @@
 		6552D17708167F87007B5824 /* SimpleObserver.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = SimpleObserver.m; path = src/SimpleObserver.m; sourceTree = "<group>"; };
 		6552D18A08167F97007B5824 /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = "<group>"; };
 		656F1B37081661FE00B0F1CA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		659BA3990C76BC7600FAFF44 /* NetGrowler.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = NetGrowler.icns; sourceTree = "<group>"; };
 		65D17AD407737296002A10A1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* NetGrowler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetGrowler.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +165,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				659BA3990C76BC7600FAFF44 /* NetGrowler.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 			);
@@ -240,6 +243,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				659BA39A0C76BC7600FAFF44 /* NetGrowler.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
