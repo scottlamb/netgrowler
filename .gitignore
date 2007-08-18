@@ -1,2 +1,5 @@
 build
+release
+netgrowler-*.tar.gz
+NetGrowler-*.dmg
 .DS_Store
