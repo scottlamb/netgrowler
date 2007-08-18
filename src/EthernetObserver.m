@@ -34,25 +34,18 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	self = [super init];
 
 	if (self) {
+		dynStore = [aDynStore retain];
+
 		// Load the icon
 		NSString *path = [[NSWorkspace sharedWorkspace] fullPathForApplication:IP_APP_NAME];
 		ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
 
 		// Find our interface name
-		/*//aService = @"0";
 		NSString *interfaceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", aService];
-		//NSString *interfaceKey = @"Setup:/Network/Service/0/Interface";
-		NSLog(@"interfaceKey = '%@'", interfaceKey);
-		NSDictionary *interfaceValue = [dynStore valueForKey:interfaceKey];
-		NSLog(@"value is %@", interfaceValue);
-		interface = [[[dynStore valueForKey:interfaceKey] valueForKey:@"DeviceName"] retain];*/
-		
-		// XXX: don't know why the above doesn't work. I'll hardcode so it at least works on my machine.
-		interface = [[NSString alloc] initWithString:@"en0"];
+		interface = [[[dynStore valueForKey:interfaceKey] valueForKey:@"DeviceName"] retain];
 
 		NSLog(@"Initializing EthernetObserver for interface %@", interface);
-		dynStore = [aDynStore retain];
-		
+
 		NSString *linkKey = [NSString stringWithFormat:@"State:/Network/Interface/%@/Link", interface];
 		currentActive = CFBooleanGetValue((CFBooleanRef) [[dynStore valueForKey:linkKey] objectForKey:@"Active"]);
 		[dynStore addObserver:self

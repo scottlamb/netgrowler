@@ -53,18 +53,26 @@ static NSString *APP_NAME                       = @"NetGrowler.app";
 		int i;
 		for (i = 0; plugins[i].suffix != nil; i++) {
 			NSString *prefix = @"Setup:/Network/Service/";
-			NSString *pattern = [NSString stringWithFormat:@"%@[^/]*/%@", prefix, plugins[i].suffix];
+			NSString *pattern = [NSString stringWithFormat:@"%@[^/]*/Interface",prefix];
 			NSEnumerator *e = [[scNotificationManager keysForPattern:pattern] objectEnumerator];
 			NSString *key;
+
 			while ((key = [e nextObject]) != nil) {
 				// Find the service part
 				int startIndex = [prefix length];
 				int j;
 				for (j = startIndex; [key characterAtIndex:j] != '/'; j++) ;
 				NSString *service = [key substringWithRange:NSMakeRange(startIndex, j-startIndex)];
-				id observer = [((id) plugins[i].class) performSelector:NSSelectorFromString(@"alloc")];
-				[observer initWithService:service andStore:scNotificationManager];
-				[observers addObject:observer];
+				NSString *type = [[scNotificationManager valueForKey:key] valueForKey:@"Hardware"];
+				NSString *deviceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", service];
+				NSString *deviceName = [[scNotificationManager valueForKey:deviceKey] valueForKey:@"DeviceName"];
+				NSString *linkKey = [NSString stringWithFormat:@"State:/Network/Interface/%@/Link", deviceName];
+
+				if ([plugins[i].suffix isEqualToString:type] && [scNotificationManager valueForKey:linkKey] != nil){
+					id observer = [((id) plugins[i].class) performSelector:NSSelectorFromString(@"alloc")];
+					[observer initWithService:service andStore:scNotificationManager];
+					[observers addObject:observer];
+				}
 			}
 		}
 
