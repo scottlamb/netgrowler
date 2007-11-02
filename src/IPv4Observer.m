@@ -16,7 +16,10 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
-#define IP_APP_NAME                    @"Internet Connect.app"
+const static NSString* ICON_PATHS[] = {
+	@"/System/Library/PreferencePanes/Network.prefPane",
+	@"/Applications/Internet Connect.app",
+};
 
 @interface IPv4Observer (PRIVATE)
 - (void)statusChange:(NSString*)keyName;
@@ -30,16 +33,20 @@
 	self = [super init];
 
 	if (self) {
+		int i;
+
 		NSLog(@"Initializing IPv4Observer");
 		dynStore = [aDynStore retain];
 
 		[dynStore addObserver:self
 					 selector:@selector(statusChange:)
-					   forKey:@"State:/Network/Global/IPv4"];		
+					   forKey:@"State:/Network/Global/IPv4"];
 
-		NSString *path = [[NSWorkspace sharedWorkspace] fullPathForApplication:IP_APP_NAME];
-		ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
-		//currentPrimaryIP = [self getPrimaryIP];
+		for (i = 0; i < sizeof(ICON_PATHS)/sizeof(ICON_PATHS[0]); i++) {
+			ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:(NSString*)ICON_PATHS[i]] retain];
+			if (ipIcon != nil)
+				break;
+		}
 	}
 
 	return self;

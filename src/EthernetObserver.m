@@ -18,7 +18,10 @@
 #import <net/if_media.h>
 #import <unistd.h>
 
-#define IP_APP_NAME                    @"Internet Connect.app"
+const static NSString* ICON_PATHS[] = {
+	@"/System/Library/PreferencePanes/Network.prefPane",
+	@"/Applications/Internet Connect.app",
+};
 
 static struct ifmedia_description ifm_subtype_ethernet_descriptions[] = IFM_SUBTYPE_ETHERNET_DESCRIPTIONS;
 static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_OPTION_DESCRIPTIONS;
@@ -34,11 +37,16 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	self = [super init];
 
 	if (self) {
+		int i;
+
 		dynStore = [aDynStore retain];
 
 		// Load the icon
-		NSString *path = [[NSWorkspace sharedWorkspace] fullPathForApplication:IP_APP_NAME];
-		ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
+		for (i = 0; i < sizeof(ICON_PATHS)/sizeof(ICON_PATHS[0]); i++) {
+			ipIcon = [[[NSWorkspace sharedWorkspace] iconForFile:(NSString*)ICON_PATHS[i]] retain];
+			if (ipIcon != nil)
+				break;
+		}
 
 		// Find our interface name
 		NSString *interfaceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", aService];

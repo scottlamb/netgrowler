@@ -10,7 +10,10 @@
 #import "NetGrowlerController.h"
 #import <Cocoa/Cocoa.h>
 
-#define AIRPORT_APP_NAME @"Airport Admin Utility.app"
+const static NSString* ICON_PATHS[] = {
+	@"/Applications/Utilities/Airport Utility.app",			/* 10.5 */
+	@"/Applications/Utilities/Airport Admin Utility.app",	/* 10.4 and earlier */
+};
 
 @interface AirportObserver (PRIVATE)
 - (void)airportStatusChange:(NSString*)keyName;
@@ -22,6 +25,8 @@
 	self = [super init];
 
 	if (self) {
+		int i;
+
 		dynStore = [aDynStore retain];
 		NSString *interfaceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", aService];
 		interface = [[[dynStore valueForKey:interfaceKey] valueForKey:@"DeviceName"] retain];
@@ -34,8 +39,11 @@
 					   forKey:airportKey];
 
 		// Load AirPort icon
-		NSString *path = [[NSWorkspace sharedWorkspace] fullPathForApplication:AIRPORT_APP_NAME];
-		airportIcon = [[[NSWorkspace sharedWorkspace] iconForFile:path] retain];
+		for (i = 0; i < sizeof(ICON_PATHS)/sizeof(ICON_PATHS[0]); i++) {
+			airportIcon = [[[NSWorkspace sharedWorkspace] iconForFile:(NSString*)ICON_PATHS[i]] retain];
+			if (airportIcon != nil)
+				break;
+		}
 	}
 
 	return self;
@@ -56,7 +64,7 @@
 	int newLink = [[newStatus objectForKey:@"Link Status"] intValue];
 	NSData *oldBSSID = [currentStatus objectForKey:@"BSSID"];
 	NSData *newBSSID = [newStatus objectForKey:@"BSSID"];
-	
+
 	if ((currentStatus == nil && newLink == LINK_DISCONNECTED) || [oldBSSID isEqualToData:newBSSID]) {
 		// I seem to get a couple bogus notifications before joining a new network. Not sure why.
 		// Also suppress disconnect message on waking.
