@@ -1,12 +1,13 @@
 $Id$
 
 
-NetGrowler 0.2.4 (released ?? Nov 2007)
+NetGrowler 0.2.4 (released 2 Nov 2007)
 ----------------
 
 * Fixes for OS X 10.5 Leopard:
   - Updated icon references.
   - Matched new format of State:/Network/Interface/*/AirPort notifications.
+
 
 NetGrowler 0.2.3 (released 18 Aug 2007)
 ----------------
@@ -17,6 +18,7 @@ NetGrowler 0.2.3 (released 18 Aug 2007)
 
 * Remove hardcoded interface names, also thanks to
   Jeremy Cutler <cutler@eecg.toronto.edu>.
+
 
 NetGrowler 0.2.2 (released 13 May 2005)
 ----------------
