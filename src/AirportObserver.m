@@ -16,6 +16,18 @@ const static NSString* ICON_PATHS[] = {
 	@"/Applications/Utilities/Airport Admin Utility.app",	/* 10.4 and earlier */
 };
 
+static int getOSXMajorVersion(void) {
+	struct utsname name;
+	char *dotp;
+
+	uname(&name);
+	dotp = strchr(name.release, '.');
+	if (dotp != NULL)
+		*dotp = 0;
+	return atoi(name.release);
+}
+
+
 @interface AirportObserver (PRIVATE)
 - (void)airportStatusChange:(NSString*)keyName;
 @end
@@ -27,7 +39,6 @@ const static NSString* ICON_PATHS[] = {
 
 	if (self) {
 		int i;
-		struct utsname name;
 
 		dynStore = [aDynStore retain];
 		NSString *interfaceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", aService];
@@ -47,8 +58,7 @@ const static NSString* ICON_PATHS[] = {
 				break;
 		}
 
-		uname(&name);
-		beforeLeopard = strcmp(name.release, "9.") < 0;
+		beforeLeopard = getOSXMajorVersion() < 9;
 	}
 
 	return self;

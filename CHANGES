@@ -1,5 +1,10 @@
 $Id$
 
+NetGrowler 0.2.5 (unreleased)
+----------------
+
+* Fixed OS X version number comparison.
+
 
 NetGrowler 0.2.4 (released 2 Nov 2007)
 ----------------
