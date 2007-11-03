@@ -9,6 +9,7 @@
 #import "SCDynamicStore.h"
 #import "NetGrowlerController.h"
 #import <Cocoa/Cocoa.h>
+#include <sys/utsname.h>
 
 const static NSString* ICON_PATHS[] = {
 	@"/Applications/Utilities/Airport Utility.app",			/* 10.5 */
@@ -26,6 +27,7 @@ const static NSString* ICON_PATHS[] = {
 
 	if (self) {
 		int i;
+		struct utsname name;
 
 		dynStore = [aDynStore retain];
 		NSString *interfaceKey = [NSString stringWithFormat:@"Setup:/Network/Service/%@/Interface", aService];
@@ -44,6 +46,9 @@ const static NSString* ICON_PATHS[] = {
 			if (airportIcon != nil)
 				break;
 		}
+
+		uname(&name);
+		beforeLeopard = strcmp(name.release, "9.") < 0;
 	}
 
 	return self;
@@ -60,18 +65,32 @@ const static NSString* ICON_PATHS[] = {
 
 - (void)airportStatusChange:(NSString*)keyName {
 	NSDictionary *newStatus = [dynStore valueForKey:keyName];
-	int LINK_DISCONNECTED = 1;
-	int newLink = [[newStatus objectForKey:@"Link Status"] intValue];
+	bool disconnected;
 	NSData *oldBSSID = [currentStatus objectForKey:@"BSSID"];
-	NSData *newBSSID = [newStatus objectForKey:@"BSSID"];
+	NSData *newBSSID = [newStatus     objectForKey:@"BSSID"];
+	NSString *oldSSID, *newSSID;
 
-	if ((currentStatus == nil && newLink == LINK_DISCONNECTED) || [oldBSSID isEqualToData:newBSSID]) {
+	if (beforeLeopard) {
+		const static int LINK_DISCONNECTED = 1;
+		disconnected = [[newStatus objectForKey:@"Link Status"] intValue]
+					   == LINK_DISCONNECTED;
+		oldSSID = [currentStatus objectForKey:@"SSID"];
+		newSSID = [newStatus     objectForKey:@"SSID"];
+	} else {
+		oldSSID = [currentStatus objectForKey:@"SSID_STR"];
+		newSSID = [newStatus     objectForKey:@"SSID_STR"];
+		disconnected = newSSID == nil || [newSSID length] == 0;
+	}
+
+	if ((currentStatus == nil && disconnected)
+		|| (oldBSSID == nil && newBSSID == nil)
+		|| [oldBSSID isEqualToData:newBSSID]) {
 		// I seem to get a couple bogus notifications before joining a new network. Not sure why.
 		// Also suppress disconnect message on waking.
 		NSLog(@"Suppressed boring airportStatusChange");
 	} else {
-		if (newLink == LINK_DISCONNECTED) {
-			NSString *desc = [NSString stringWithFormat:@"Left network %@.", [currentStatus objectForKey:@"SSID"]];
+		if (disconnected) {
+			NSString *desc = [NSString stringWithFormat:@"Left network %@.", oldSSID];
 			NSLog(@"Sending notification: AirPort disconnected");
 			[GrowlApplicationBridge notifyWithTitle:@"AirPort disconnected"
 										description:desc
@@ -82,6 +101,7 @@ const static NSString* ICON_PATHS[] = {
 									   clickContext:nil];
 		} else { // connected
 			const unsigned char *bssidBytes = [newBSSID bytes];
+			NSAssert(bssidBytes != NULL, @"NULL bssid");
 			NSString *bssid = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
 														 bssidBytes[0],
 														 bssidBytes[1],
@@ -90,7 +110,7 @@ const static NSString* ICON_PATHS[] = {
 														 bssidBytes[4],
 														 bssidBytes[5]];
 			NSString *desc = [NSString stringWithFormat:@"Joined network.\nSSID:\t\t%@\nBSSID:\t%@",
-														[newStatus objectForKey:@"SSID"],
+														newSSID,
 														bssid];
 			NSLog(@"Sending notification: AirPort connected");
 			[GrowlApplicationBridge notifyWithTitle:@"AirPort connected"

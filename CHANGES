@@ -6,6 +6,7 @@ NetGrowler 0.2.4 (released ?? Nov 2007)
 
 * Fixes for OS X 10.5 Leopard:
   - Updated icon references.
+  - Matched new format of State:/Network/Interface/*/AirPort notifications.
 
 NetGrowler 0.2.3 (released 18 Aug 2007)
 ----------------

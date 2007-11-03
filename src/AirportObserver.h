@@ -17,6 +17,8 @@
 
 	// Keep track of old status to suppress uninteresting notifications.
 	NSDictionary *currentStatus;
+
+	bool beforeLeopard;
 }
 
 - (id)initWithService:(NSString*)service andStore:(SCDynamicStore*)dynStore;
