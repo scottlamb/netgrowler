@@ -3,12 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6537695B07B5A74000947437 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6537695A07B5A74000947437 /* Growl.framework */; };
-		65376A8807B5A98800947437 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6537695A07B5A74000947437 /* Growl.framework */; };
 		6552D17808167F87007B5824 /* AirportObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 6552D16608167F87007B5824 /* AirportObserver.h */; };
 		6552D17908167F87007B5824 /* AirportObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6552D16708167F87007B5824 /* AirportObserver.m */; };
 		6552D17A08167F87007B5824 /* EthernetObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 6552D16808167F87007B5824 /* EthernetObserver.h */; };
@@ -28,6 +26,7 @@
 		6552D18C08167F97007B5824 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6552D18A08167F97007B5824 /* main.m */; };
 		656F1B38081661FE00B0F1CA /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 656F1B37081661FE00B0F1CA /* IOKit.framework */; };
 		659BA39A0C76BC7600FAFF44 /* NetGrowler.icns in Resources */ = {isa = PBXBuildFile; fileRef = 659BA3990C76BC7600FAFF44 /* NetGrowler.icns */; };
+		65C0EC0019DA718000D2DA97 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C0EBFF19DA718000D2DA97 /* Growl.framework */; };
 		65D17AD507737296002A10A1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D17AD407737296002A10A1 /* SystemConfiguration.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -40,7 +39,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				65376A8807B5A98800947437 /* Growl.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,7 +49,6 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		6537695A07B5A74000947437 /* Growl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Growl.framework; path = /Library/Frameworks/Growl.framework; sourceTree = "<absolute>"; };
 		6552D16608167F87007B5824 /* AirportObserver.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = AirportObserver.h; path = src/AirportObserver.h; sourceTree = "<group>"; };
 		6552D16708167F87007B5824 /* AirportObserver.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = AirportObserver.m; path = src/AirportObserver.m; sourceTree = "<group>"; };
 		6552D16808167F87007B5824 /* EthernetObserver.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = EthernetObserver.h; path = src/EthernetObserver.h; sourceTree = "<group>"; };
@@ -71,6 +68,7 @@
 		6552D18A08167F97007B5824 /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = "<group>"; };
 		656F1B37081661FE00B0F1CA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		659BA3990C76BC7600FAFF44 /* NetGrowler.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = NetGrowler.icns; sourceTree = "<group>"; };
+		65C0EBFF19DA718000D2DA97 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = ../../../../Library/Frameworks/Growl.framework; sourceTree = "<group>"; };
 		65D17AD407737296002A10A1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* NetGrowler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetGrowler.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,7 +81,7 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				65D17AD507737296002A10A1 /* SystemConfiguration.framework in Frameworks */,
-				6537695B07B5A74000947437 /* Growl.framework in Frameworks */,
+				65C0EC0019DA718000D2DA97 /* Growl.framework in Frameworks */,
 				656F1B38081661FE00B0F1CA /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,8 +115,8 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				65C0EBFF19DA718000D2DA97 /* Growl.framework */,
 				656F1B37081661FE00B0F1CA /* IOKit.framework */,
-				6537695A07B5A74000947437 /* Growl.framework */,
 				65D17AD407737296002A10A1 /* SystemConfiguration.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
@@ -227,10 +225,20 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
 			buildConfigurationList = 657FAE460AACDD820072F8AF /* Build configuration list for PBXProject "NetGrowler" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+				English,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* NetGrowler */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* NetGrowler */,
 			);
@@ -283,11 +291,23 @@
 		657FAE430AACDD820072F8AF /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/slamb/Library/Frameworks,
 					/Users/slamb/svn/growl/build,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Developer",
+					Tools/MultiGrowl/external,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Developer",
+					Tools/MultiGrowl/external/legacy,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Framework",
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Framework/Legacy",
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Plugin",
+					Development,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Plugin",
+					Development/GrowlView.xctemplate,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -319,10 +339,22 @@
 		657FAE440AACDD820072F8AF /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/slamb/Library/Frameworks,
 					/Users/slamb/svn/growl/build,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Developer",
+					Tools/MultiGrowl/external,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Developer",
+					Tools/MultiGrowl/external/legacy,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Framework",
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Framework/Legacy",
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Plugin",
+					Development,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Plugin",
+					Development/GrowlView.xctemplate,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_TRIGRAPHS = NO;
@@ -351,9 +383,21 @@
 		657FAE450AACDD820072F8AF /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/slamb/Library/Frameworks,
 					/Users/slamb/svn/growl/build,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Developer",
+					Tools/MultiGrowl/external,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Developer",
+					Tools/MultiGrowl/external/legacy,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Framework",
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Framework/Legacy",
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Plugin",
+					Development,
+					"$(PROJECT_DIR)/Growl-2.0.1-SDK/Plugin",
+					Development/GrowlView.xctemplate,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -380,33 +424,27 @@
 		657FAE470AACDD820072F8AF /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				SDKROOT = macosx10.8;
+				VALID_ARCHS = i386;
 			};
 			name = Development;
 		};
 		657FAE480AACDD820072F8AF /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				SDKROOT = macosx10.8;
+				VALID_ARCHS = i386;
 			};
 			name = Deployment;
 		};
 		657FAE490AACDD820072F8AF /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				SDKROOT = macosx10.8;
+				VALID_ARCHS = i386;
 			};
 			name = Default;
 		};
