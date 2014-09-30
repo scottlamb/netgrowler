@@ -92,24 +92,6 @@ static NSString *APP_NAME                       = @"NetGrowler.app";
 	[super dealloc];
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification*)notification
-{
-	if ([GrowlApplicationBridge isGrowlInstalled] == NO) {
-		NSRunAlertPanel(@"NetGrowler error",
-						@"Growl is not installed",
-						@"Exit",
-						NULL,
-						NULL);
-		[NSApp terminate];
-	/*} else if ([GrowlApplicationBridge isGrowlRunning] == NO) {
-		NSRunAlertPanel(@"NetGrowler error",
-						@"Growl failed to start",
-						@"Exit",
-						NULL,
-						NULL);*/
-	}
-}
-
 - (NSDictionary*)registrationDictionaryForGrowl {
 	NSArray *allNotes = [NSArray arrayWithObjects:
 		NOTE_ETHERNET_LINK_UP,

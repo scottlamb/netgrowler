@@ -124,7 +124,7 @@ const static NSString* ICON_PATHS[] = {
 	{ NULL, 0,				nil }
 	};
 	struct in_addr addr;
-	if (inet_pton(AF_INET, [ipString cString], &addr) <= 0) {
+	if (inet_pton(AF_INET, [ipString UTF8String], &addr) <= 0) {
 		NSAssert(NO, @"Unable to parse given IP address.");
 	}
 	unsigned int i;

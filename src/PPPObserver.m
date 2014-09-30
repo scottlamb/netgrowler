@@ -55,7 +55,7 @@
 		NSLog(@"Suppressed duplicate PPP notification.");
 	} else if (newRemoteAddress == nil) {
 		NSLog(@"Sending notification: PPP deactivated");
-		NSString *desc = [NSString stringWithFormat:@"Remote address:", oldRemoteAddress];
+		NSString *desc = [NSString stringWithFormat:@"Remote address: %@", oldRemoteAddress];
 		[GrowlApplicationBridge notifyWithTitle:@"PPP deactivated"
 									description:desc
 							   notificationName:NOTE_PPP_LINK_DOWN
@@ -65,7 +65,7 @@
 								   clickContext:nil];		
 	} else {
 		NSLog(@"Sending notification: PPP activated");
-		NSString *desc = [NSString stringWithFormat:@"Remote address:", newRemoteAddress];
+		NSString *desc = [NSString stringWithFormat:@"Remote address: %@", newRemoteAddress];
 		[GrowlApplicationBridge notifyWithTitle:@"PPP activated"
 									description:desc
 							   notificationName:NOTE_PPP_LINK_UP

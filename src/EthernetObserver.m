@@ -107,14 +107,16 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	// This is all made by looking through Darwin's src/network_cmds/ifconfig.tproj.
 	// There's no pretty way to get media stuff; I've stripped it down to the essentials
 	// for what I'm doing.
+	const char* interfaceStr = [interface UTF8String];
+	size_t interfaceStrLen = strlen(interfaceStr);
 	
-	NSAssert([interface cStringLength] < IFNAMSIZ, @"Interface name too long");
+	NSAssert(interfaceStrLen < IFNAMSIZ, @"Interface name too long");
 	
 	int s = socket(AF_INET, SOCK_DGRAM, 0);
 	NSAssert(s >= 0, @"Can't open datagram socket");
 	struct ifmediareq ifmr;
 	memset(&ifmr, 0, sizeof(ifmr));
-	strncpy(ifmr.ifm_name, [interface cString], [interface cStringLength]);
+	strncpy(ifmr.ifm_name, interfaceStr, interfaceStrLen);
 	
 	if (ioctl(s, SIOCGIFMEDIA, (caddr_t)&ifmr) < 0) {
 		// Media not supported.
@@ -145,14 +147,14 @@ static struct ifmedia_description ifm_shared_option_descriptions[] = IFM_SHARED_
 	for (desc = ifm_shared_option_descriptions; desc->ifmt_string != NULL; desc++) {
 		if (ifmr.ifm_active & desc->ifmt_word) {
 			if (options == nil) {
-				options = [NSString stringWithCString:desc->ifmt_string];
+				options = [NSString stringWithUTF8String:desc->ifmt_string];
 			} else {
 				options = [NSString stringWithFormat:@"%@,%s", options, desc->ifmt_string];
 			}
 		}
 	}
 	
-	return (options == nil) ? [NSString stringWithCString:type]
+	return (options == nil) ? [NSString stringWithUTF8String:type]
 							: [NSString stringWithFormat:@"%s <%@>", type, options];
 }
 
