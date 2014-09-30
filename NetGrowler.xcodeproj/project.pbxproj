@@ -26,8 +26,8 @@
 		6552D18C08167F97007B5824 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6552D18A08167F97007B5824 /* main.m */; };
 		656F1B38081661FE00B0F1CA /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 656F1B37081661FE00B0F1CA /* IOKit.framework */; };
 		659BA39A0C76BC7600FAFF44 /* NetGrowler.icns in Resources */ = {isa = PBXBuildFile; fileRef = 659BA3990C76BC7600FAFF44 /* NetGrowler.icns */; };
-		65C0EC0019DA718000D2DA97 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C0EBFF19DA718000D2DA97 /* Growl.framework */; };
 		65D17AD507737296002A10A1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D17AD407737296002A10A1 /* SystemConfiguration.framework */; };
+		65DF0FBA19DA75480015F8E1 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65DF0FB919DA75480015F8E1 /* Growl.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -68,8 +68,8 @@
 		6552D18A08167F97007B5824 /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = "<group>"; };
 		656F1B37081661FE00B0F1CA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		659BA3990C76BC7600FAFF44 /* NetGrowler.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = NetGrowler.icns; sourceTree = "<group>"; };
-		65C0EBFF19DA718000D2DA97 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = ../../../../Library/Frameworks/Growl.framework; sourceTree = "<group>"; };
 		65D17AD407737296002A10A1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
+		65DF0FB919DA75480015F8E1 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = ../../../../Library/Frameworks/Growl.framework; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* NetGrowler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetGrowler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -81,7 +81,7 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				65D17AD507737296002A10A1 /* SystemConfiguration.framework in Frameworks */,
-				65C0EC0019DA718000D2DA97 /* Growl.framework in Frameworks */,
+				65DF0FBA19DA75480015F8E1 /* Growl.framework in Frameworks */,
 				656F1B38081661FE00B0F1CA /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -115,7 +115,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				65C0EBFF19DA718000D2DA97 /* Growl.framework */,
+				65DF0FB919DA75480015F8E1 /* Growl.framework */,
 				656F1B37081661FE00B0F1CA /* IOKit.framework */,
 				65D17AD407737296002A10A1 /* SystemConfiguration.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
@@ -291,6 +291,7 @@
 		657FAE430AACDD820072F8AF /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
@@ -326,6 +327,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = NetGrowler;
 				SECTORDER_FLAGS = "";
+				VALID_ARCHS = "i386 x86_64";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -339,6 +341,7 @@
 		657FAE440AACDD820072F8AF /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -370,6 +373,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = NetGrowler;
 				SECTORDER_FLAGS = "";
+				VALID_ARCHS = "i386 x86_64";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -383,6 +387,7 @@
 		657FAE450AACDD820072F8AF /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/slamb/Library/Frameworks,
@@ -412,6 +417,7 @@
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = NetGrowler;
 				SECTORDER_FLAGS = "";
+				VALID_ARCHS = "i386 x86_64";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
